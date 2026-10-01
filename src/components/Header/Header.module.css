@@ -5,13 +5,17 @@
 }
 
 .top {
+  position: relative;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   margin-bottom: 16px;
 }
 
 .logo {
+  justify-self: start;
   color: #222222;
   font-size: 26px;
   font-weight: 800;
@@ -20,6 +24,9 @@
 }
 
 .navigation {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 32px;
@@ -46,7 +53,7 @@
   height: 2px;
   border-radius: 2px;
   background-color: #222222;
-  content: "";
+  content: ""; /* эффект почеркивания в хедере */
   transform: scaleX(0);
   transition: transform 0.2s ease;
 }
@@ -55,10 +62,11 @@
   transform: scaleX(1);
 }
 
-.settings {
-  display: flex;
+.menuButton {
+  display: none;
   align-items: center;
   justify-content: center;
+  justify-self: end;
   width: 40px;
   height: 40px;
   padding: 0;
@@ -73,9 +81,13 @@
     box-shadow 0.2s ease;
 }
 
-.settings:hover {
+.menuButton:hover {
   background-color: #f7f7f7;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.mobileMenu {
+  display: none;
 }
 
 @media (max-width: 768px) {
@@ -84,6 +96,8 @@
   }
 
   .top {
+    display: flex;
+    justify-content: space-between;
     margin-bottom: 12px;
   }
 
@@ -95,8 +109,38 @@
     display: none;
   }
 
-  .settings {
+  .menuButton {
+    display: flex;
     width: 38px;
     height: 38px;
+  }
+
+  .mobileMenu {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px;
+    border: 1px solid #eeeeee;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .mobileMenu a {
+    padding: 12px;
+    border-radius: 8px;
+    color: #333333;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .mobileMenu a:hover {
+    background-color: #f7f7f7;
   }
 }

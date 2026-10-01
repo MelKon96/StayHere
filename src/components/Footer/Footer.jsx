@@ -6,7 +6,7 @@ const Footer = () => {
     <footer className={styles.footer}>
       <Container>
         <div className={styles.wrapper}>
-          <div className={styles.copyright}>© 2026 Stayly</div>
+          <div className={styles.copyright}>© 2026 Stayhere</div>
 
           <div className={styles.settings}>
             <button type="button">Русский</button>
