@@ -1,0 +1,50 @@
+.hotels {
+  padding: 30px 0;
+}
+
+.title {
+  margin: 0 0 24px;
+  font-size: 28px;
+}
+
+.content {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+.filters {
+  flex: 0 0 250px;
+}
+
+.list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .hotels {
+    padding: 24px 0;
+  }
+
+  .title {
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+
+  .content {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .filters {
+    width: 100%;
+    flex: none;
+  }
+
+  .list {
+    width: 100%;
+  }
+}

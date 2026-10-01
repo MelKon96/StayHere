@@ -1,0 +1,48 @@
+.filters {
+  padding: 20px;
+  border: 1px solid #dddddd;
+  border-radius: var(--border-radius-main);
+  background-color: white;
+}
+
+.title {
+  margin: 0 0 25px;
+  font-size: 20px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.group:last-child {
+  margin-bottom: 0;
+}
+
+.group h3 {
+  margin: 0 0 5px;
+  font-size: 15px;
+}
+
+.group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.priceInputs {
+  display: flex;
+  gap: 8px;
+}
+
+.priceInputs input {
+  width: 100%;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  font: inherit;
+}

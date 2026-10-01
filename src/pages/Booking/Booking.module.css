@@ -1,0 +1,258 @@
+.page {
+  padding: 40px 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.container > h1 {
+  margin: 0 0 30px;
+  font-size: 32px;
+}
+
+.hotel {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.image {
+  width: 140px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.hotel h2 {
+  margin: 0 0 6px;
+  font-size: 22px;
+}
+
+.hotel p {
+  margin: 0;
+  color: #717171;
+}
+
+.roomsCount {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 0;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.roomsControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.roomsControls button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #cccccc;
+  border-radius: 50%;
+  background-color: #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.roomsControls button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.room {
+  padding: 24px 0;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.room h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+.room p {
+  margin: 6px 0;
+  color: #717171;
+}
+
+.dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 24px 0;
+}
+
+.dates div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  border: 1px solid #dddddd;
+  border-radius: 12px;
+}
+
+.dates span,
+.summary span {
+  color: #717171;
+  font-size: 13px;
+}
+
+.dates strong {
+  font-size: 16px;
+}
+
+.dates input {
+  padding: 8px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  padding: 24px 0;
+  border-top: 1px solid #eeeeee;
+}
+
+.summary div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.summary strong {
+  font-size: 18px;
+}
+
+.confirmButton {
+  margin-top: 24px;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 10px;
+  background-color: #222222;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.confirmButton:hover {
+  background-color: #444444;
+}
+
+.confirmButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 24px 0;
+  }
+
+  .container {
+    padding: 0 24px;
+    box-sizing: border-box;
+  }
+
+  .container > h1 {
+    margin-bottom: 24px;
+    font-size: 26px;
+  }
+
+  .hotel {
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .image {
+    width: 110px;
+    height: 80px;
+  }
+
+  .hotel h2 {
+    font-size: 19px;
+  }
+
+  .roomsCount {
+    padding: 20px 0;
+  }
+
+  .dates {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 20px 0;
+  }
+
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px 0;
+  }
+
+  .summary div:last-of-type {
+    grid-column: 1 / -1;
+  }
+
+  .confirmButton {
+    width: 100%;
+    margin-top: 4px;
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 20px 0;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .container > h1 {
+    font-size: 24px;
+  }
+
+  .hotel {
+    gap: 12px;
+  }
+
+  .image {
+    width: 90px;
+    height: 70px;
+    border-radius: 10px;
+  }
+
+  .hotel h2 {
+    font-size: 17px;
+  }
+
+  .hotel p {
+    font-size: 14px;
+  }
+
+  .dates div {
+    padding: 14px;
+  }
+
+  .summary {
+    gap: 16px;
+  }
+
+  .summary strong {
+    font-size: 16px;
+  }
+
+  .confirmButton {
+    padding: 13px 16px;
+  }
+}

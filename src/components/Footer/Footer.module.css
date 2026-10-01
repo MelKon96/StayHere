@@ -1,0 +1,39 @@
+.footer {
+  margin-top: 40px;
+  border-top: 1px solid #eeeeee;
+  background-color: #ffffff;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 72px;
+}
+
+.copyright {
+  color: #717171;
+  font-size: 14px;
+}
+
+.settings {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.settings button {
+  padding: 6px 0;
+  border: none;
+  background: none;
+  color: #444444;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.settings button:hover {
+  color: #111111;
+}

@@ -1,0 +1,245 @@
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 60%;
+  margin: 10px auto;
+  background-color: white;
+  border: 1px solid #dddddd;
+  border-radius: var(--border-radius-main);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease;
+}
+
+.search:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+}
+
+.item {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 10px 20px;
+  border-radius: var(--border-radius-main);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.item:hover {
+  background-color: #f7f7f7;
+}
+
+.item.active {
+  background-color: #eeeeee;
+}
+
+.label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.searchField {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+}
+
+.searchValue {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0;
+  border: none;
+  outline: none;
+  color: #717171;
+  font: inherit;
+  background: transparent;
+}
+
+.suggestions {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 200px;
+  padding: 8px;
+  background-color: white;
+  border: 1px solid #dddddd;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.suggestions button {
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.suggestions button:hover {
+  background-color: #f5f5f5;
+}
+
+.datePicker {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 10;
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background-color: white;
+  border: 1px solid #dddddd;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.datePicker label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.datePicker input {
+  padding: 8px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+}
+
+.guestsPicker {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 220px;
+  padding: 16px;
+  background-color: white;
+  border: 1px solid #dddddd;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.guestsControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.guestsControls button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #cccccc;
+  border-radius: 50%;
+  background: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.guestsControls button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.searchButton {
+  padding: 12px 20px;
+  margin-right: 5px;
+  border: none;
+  border-radius: var(--border-radius-main);
+  background-color: #222;
+  color: white;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.searchButton:hover {
+  background-color: #333;
+}
+
+/* планшеты + мобилки */
+@media (max-width: 768px) {
+  .search {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    margin: 8px 0;
+    border-radius: 20px;
+  }
+
+  .item {
+    flex: none;
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 0;
+  }
+
+  .item:first-child {
+    border-radius: 20px 20px 0 0;
+  }
+
+  .suggestions,
+  .datePicker,
+  .guestsPicker {
+    position: static;
+    width: 100%;
+    min-width: 0;
+    margin-top: 8px;
+    box-sizing: border-box;
+  }
+
+  .suggestions {
+    padding: 8px;
+  }
+
+  .datePicker {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .datePicker input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .guestsPicker {
+    display: flex;
+    padding: 12px;
+  }
+
+  .searchButton {
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 0 0 20px 20px;
+  }
+}
+/* мобилки с узким экраном */
+@media (max-width: 480px) {
+  .item {
+    padding: 11px 14px;
+  }
+
+  .datePicker,
+  .guestsPicker {
+    margin-top: 8px;
+  }
+}
