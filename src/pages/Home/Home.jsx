@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 
+import { destinations } from "../../constants/destinations";
 import { translations } from "../../constants/translations";
 
 import styles from "./Home.module.css";
@@ -30,25 +31,16 @@ const Home = () => {
           <h2 className={styles.sectionTitle}>{text.home.popularDestinations}</h2>
 
           <div className={styles.destinationGrid}>
-            <article className={styles.destination}>
-              <h3>{text.home.destinations.berlin.city}</h3>
-              <p>{text.home.destinations.berlin.country}</p>
-            </article>
+            {destinations.map((destination) => (
+              <article key={destination.key} className={styles.destination}>
+                <img src={destination.image} alt={text.home.destinations[destination.key].city} />
 
-            <article className={styles.destination}>
-              <h3>{text.home.destinations.amsterdam.city}</h3>
-              <p>{text.home.destinations.amsterdam.country}</p>
-            </article>
-
-            <article className={styles.destination}>
-              <h3>{text.home.destinations.paris.city}</h3>
-              <p>{text.home.destinations.paris.country}</p>
-            </article>
-
-            <article className={styles.destination}>
-              <h3>{text.home.destinations.barcelona.city}</h3>
-              <p>{text.home.destinations.barcelona.country}</p>
-            </article>
+                <div className={styles.destinationContent}>
+                  <h3>{text.home.destinations[destination.key].city}</h3>
+                  <p>{text.home.destinations[destination.key].country}</p>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
