@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import Hotels from "../pages/Hotels/Hotels";
 import HotelDetails from "../pages/HotelDetails/HotelDetails";
-import Booking from "../pages/booking/Booking";
+import Booking from "../pages/Booking/Booking";
 import MyBookings from "../pages/MyBookings/MyBookings";
 
 const AppRouter = () => {
