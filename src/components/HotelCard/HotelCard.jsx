@@ -1,12 +1,16 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
+import { translations } from "../../constants/translations";
 import { convertPrice, getCurrencySymbol } from "../../utils/currency";
 
 import styles from "./HotelCard.module.css";
 
 const HotelCard = ({ hotel }) => {
   const currency = useSelector((state) => state.settings.currency);
+  const language = useSelector((state) => state.settings.language);
+
+  const text = translations[language];
 
   const cheapestRoom = hotel.roomTypes.reduce((cheapest, room) => (room.pricePerNight < cheapest.pricePerNight ? room : cheapest));
 
@@ -28,11 +32,11 @@ const HotelCard = ({ hotel }) => {
         </div>
 
         <p className={styles.price}>
-          от {price.toFixed(2)} {currencySymbol} / ночь
+          {text.hotels.card.from} {price.toFixed(2)} {currencySymbol} {text.hotels.card.perNight}
         </p>
 
         <Link to={`/hotels/${hotel.id}`} className={styles.detailsLink}>
-          Подробнее
+          {text.hotels.card.details}
         </Link>
       </div>
     </article>

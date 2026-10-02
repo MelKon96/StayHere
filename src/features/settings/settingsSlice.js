@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const savedCurrency = localStorage.getItem("stayhere_currency");
+const savedLanguage = localStorage.getItem("stayhere_language");
 
 const initialState = {
-  lang: "ru",
+  language: savedLanguage === "en" ? "en" : "ru",
   currency: savedCurrency === "USD" ? "USD" : "EUR",
 };
 
@@ -11,8 +12,8 @@ const settingsSlice = createSlice({
   name: "settings",
   initialState,
   reducers: {
-    setLang: (state, action) => {
-      state.lang = action.payload;
+    setLanguage: (state, action) => {
+      state.language = action.payload;
     },
     setCurrency: (state, action) => {
       state.currency = action.payload;
@@ -20,6 +21,6 @@ const settingsSlice = createSlice({
   },
 });
 
-export const { setLang, setCurrency } = settingsSlice.actions;
+export const { setLanguage, setCurrency } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

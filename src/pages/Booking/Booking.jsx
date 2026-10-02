@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { setBookingCheckIn, setBookingCheckOut, setRooms, addBooking, clearBooking } from "../../features/booking/bookingSlice";
+import { translations } from "../../constants/translations";
 import { convertPrice, getCurrencySymbol } from "../../utils/currency";
 
 import styles from "./Booking.module.css";
@@ -9,6 +10,9 @@ import styles from "./Booking.module.css";
 const Booking = () => {
   const booking = useSelector((state) => state.booking.current);
   const currency = useSelector((state) => state.settings.currency);
+  const language = useSelector((state) => state.settings.language);
+
+  const text = translations[language];
 
   const dispatch = useDispatch();
 
@@ -28,7 +32,7 @@ const Booking = () => {
     return (
       <main className={styles.page}>
         <div className={styles.container}>
-          <h1>Бронирование не выбрано</h1>
+          <h1>{text.booking.notSelected}</h1>
         </div>
       </main>
     );
@@ -54,6 +58,7 @@ const Booking = () => {
 
   const displayedTotalPrice = convertPrice(totalPrice, currency);
   const displayedConfirmedTotalPrice = convertPrice(confirmedTotalPrice, currency);
+
   const currencySymbol = getCurrencySymbol(currency);
 
   return (
@@ -63,44 +68,45 @@ const Booking = () => {
           <section className={styles.confirmation}>
             <div className={styles.confirmationIcon}>✓</div>
 
-            <h1>Бронирование подтверждено</h1>
+            <h1>{text.booking.confirmed}</h1>
 
-            <p className={styles.confirmationMessage}>Ваше бронирование успешно оформлено.</p>
+            <p className={styles.confirmationMessage}>{text.booking.successMessage}</p>
 
             <div className={styles.confirmationDetails}>
               <div className={styles.confirmationDetail}>
-                <span>Отель</span>
+                <span>{text.booking.hotel}</span>
                 <strong>{confirmedBooking.hotel.name}</strong>
               </div>
 
               <div className={styles.confirmationDetail}>
-                <span>Номер</span>
+                <span>{text.booking.room}</span>
                 <strong>{confirmedBooking.room.name}</strong>
               </div>
 
               <div className={styles.confirmationDetail}>
-                <span>Заезд</span>
+                <span>{text.booking.checkIn}</span>
                 <strong>{confirmedBooking.checkIn}</strong>
               </div>
 
               <div className={styles.confirmationDetail}>
-                <span>Выезд</span>
+                <span>{text.booking.checkOut}</span>
                 <strong>{confirmedBooking.checkOut}</strong>
               </div>
 
               <div className={styles.confirmationDetail}>
-                <span>Номеров</span>
+                <span>{text.booking.rooms}</span>
                 <strong>{confirmedBooking.rooms}</strong>
               </div>
 
               <div className={styles.confirmationDetail}>
-                <span>Гостей</span>
+                <span>{text.booking.guests}</span>
                 <strong>{confirmedBooking.guests}</strong>
               </div>
             </div>
 
             <div className={styles.confirmationTotal}>
-              <span>Итоговая стоимость</span>
+              <span>{text.booking.total}</span>
+
               <strong>
                 {displayedConfirmedTotalPrice.toFixed(2)} {currencySymbol}
               </strong>
@@ -110,7 +116,7 @@ const Booking = () => {
 
         {!isConfirmed && (
           <>
-            <h1 className={styles.title}>Бронирование</h1>
+            <h1 className={styles.title}>{text.booking.title}</h1>
 
             <section className={styles.hotel}>
               <img src={booking.hotel.images[0]} alt={booking.hotel.name} className={styles.image} />
@@ -122,7 +128,7 @@ const Booking = () => {
             </section>
 
             <section className={styles.roomsCount}>
-              <span>Номеров</span>
+              <span>{text.booking.rooms}</span>
 
               <div className={styles.roomsControls}>
                 <button type="button" onClick={() => dispatch(setRooms(booking.rooms - 1))} disabled={booking.rooms === 1}>
@@ -139,14 +145,14 @@ const Booking = () => {
 
             <section className={styles.dates}>
               <div>
-                <span>Заезд</span>
+                <span>{text.booking.checkIn}</span>
 
                 <input type="date" value={booking.checkIn || ""} onChange={(event) => dispatch(setBookingCheckIn(event.target.value))} />
               </div>
 
               {booking.checkIn && (
                 <div>
-                  <span>Выезд</span>
+                  <span>{text.booking.checkOut}</span>
 
                   <input type="date" value={booking.checkOut || ""} min={new Date(new Date(booking.checkIn).getTime() + 86400000).toISOString().split("T")[0]} onChange={(event) => dispatch(setBookingCheckOut(event.target.value))} />
                 </div>
@@ -155,24 +161,25 @@ const Booking = () => {
 
             <section className={styles.summary}>
               <div>
-                <span>Гостей</span>
+                <span>{text.booking.guests}</span>
                 <strong>{booking.guests}</strong>
               </div>
 
               <div>
-                <span>Ночей</span>
+                <span>{text.booking.nights}</span>
                 <strong>{nights}</strong>
               </div>
 
               <div>
-                <span>Стоимость</span>
+                <span>{text.booking.price}</span>
+
                 <strong>
                   {displayedTotalPrice.toFixed(2)} {currencySymbol}
                 </strong>
               </div>
 
               <button type="button" className={styles.confirmButton} onClick={handleConfirm} disabled={!booking.checkIn || !booking.checkOut}>
-                Подтвердить бронирование
+                {text.booking.confirm}
               </button>
             </section>
           </>

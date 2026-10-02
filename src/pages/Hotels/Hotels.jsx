@@ -4,12 +4,18 @@ import { useSelector } from "react-redux";
 import HotelCard from "../../components/HotelCard/HotelCard";
 import HotelFilters from "../../components/HotelFilters/HotelFilters";
 import { useGetHotelsQuery } from "../../services/hotelApi";
+import { translations } from "../../constants/translations";
 
 import styles from "./Hotels.module.css";
 
 const Hotels = () => {
   const { data: hotels = [], isLoading, error } = useGetHotelsQuery();
+
   const city = useSelector((state) => state.search.city);
+  const language = useSelector((state) => state.settings.language);
+  const currency = useSelector((state) => state.settings.currency);
+
+  const text = translations[language];
 
   const [filters, setFilters] = useState({
     minPrice: "",
@@ -57,23 +63,23 @@ const Hotels = () => {
   });
 
   if (isLoading) {
-    return <p>Загрузка...</p>;
+    return <p>{text.hotels.loading}</p>;
   }
 
   if (error) {
-    return <p>Ошибка загрузки данных</p>;
+    return <p>{text.hotels.error}</p>;
   }
 
   return (
     <main className={styles.hotels}>
-      <h1 className={styles.title}>Найденные варианты</h1>
+      <h1 className={styles.title}>{text.hotels.title}</h1>
 
       <div className={styles.content}>
         <aside className={styles.filters}>
           <HotelFilters filters={filters} onFiltersChange={setFilters} />
         </aside>
 
-        <section className={styles.list}>{filteredHotels.length > 0 ? filteredHotels.map((hotel) => <HotelCard key={hotel.id} hotel={hotel} />) : <p>По заданным фильтрам ничего не найдено.</p>}</section>
+        <section className={styles.list}>{filteredHotels.length > 0 ? filteredHotels.map((hotel) => <HotelCard key={hotel.id} hotel={hotel} />) : <p>{text.hotels.noResults}</p>}</section>
       </div>
     </main>
   );
