@@ -1,6 +1,8 @@
+import { useSelector } from "react-redux";
 import styles from "./HotelFilters.module.css";
 
 const HotelFilters = ({ filters, onFiltersChange }) => {
+  const currency = useSelector((state) => state.settings.currency);
   const handlePriceChange = (field, value) => {
     onFiltersChange({
       ...filters,
@@ -38,7 +40,7 @@ const HotelFilters = ({ filters, onFiltersChange }) => {
       <h2 className={styles.title}>Фильтры</h2>
 
       <div className={styles.group}>
-        <h3>Цена за ночь (€)</h3>
+        <h3>Цена за ночь {currency}</h3>
 
         <div className={styles.priceInputs}>
           <input type="number" placeholder="От" min="0" value={filters.minPrice} step="10" onChange={(event) => handlePriceChange("minPrice", event.target.value)} />

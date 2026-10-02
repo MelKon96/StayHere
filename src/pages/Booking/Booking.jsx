@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { setBookingCheckIn, setBookingCheckOut, setRooms, addBooking, clearBooking } from "../../features/booking/bookingSlice";
+import { convertPrice, getCurrencySymbol } from "../../utils/currency";
 
 import styles from "./Booking.module.css";
 
 const Booking = () => {
   const booking = useSelector((state) => state.booking.current);
+  const currency = useSelector((state) => state.settings.currency);
 
   const dispatch = useDispatch();
 
@@ -49,6 +51,10 @@ const Booking = () => {
   const confirmedNights = confirmedBooking ? calculateNights(confirmedBooking.checkIn, confirmedBooking.checkOut) : 0;
 
   const confirmedTotalPrice = confirmedBooking ? confirmedBooking.room.pricePerNight * confirmedNights * confirmedBooking.rooms : 0;
+
+  const displayedTotalPrice = convertPrice(totalPrice, currency);
+  const displayedConfirmedTotalPrice = convertPrice(confirmedTotalPrice, currency);
+  const currencySymbol = getCurrencySymbol(currency);
 
   return (
     <main className={styles.page}>
@@ -95,7 +101,9 @@ const Booking = () => {
 
             <div className={styles.confirmationTotal}>
               <span>Итоговая стоимость</span>
-              <strong>{confirmedTotalPrice} €</strong>
+              <strong>
+                {displayedConfirmedTotalPrice.toFixed(2)} {currencySymbol}
+              </strong>
             </div>
           </section>
         )}
@@ -158,7 +166,9 @@ const Booking = () => {
 
               <div>
                 <span>Стоимость</span>
-                <strong>{totalPrice} €</strong>
+                <strong>
+                  {displayedTotalPrice.toFixed(2)} {currencySymbol}
+                </strong>
               </div>
 
               <button type="button" className={styles.confirmButton} onClick={handleConfirm} disabled={!booking.checkIn || !booking.checkOut}>
