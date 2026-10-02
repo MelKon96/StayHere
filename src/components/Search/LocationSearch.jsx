@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { useGetHotelsQuery } from "../../services/hotelApi";
 import { setCity } from "../../features/search/searchSlice";
+import { useGetHotelsQuery } from "../../services/hotelApi";
 
 import styles from "./Search.module.css";
 import useDebounce from "../../hooks/useDebounce";
@@ -26,12 +26,18 @@ export default function LocationSearch({ active, onOpen, onClose }) {
     onClose();
   };
 
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+    setInputValue(value);
+    dispatch(setCity(value));
+  };
+
   return (
     <div className={`${styles.item} ${active ? styles.active : ""}`} onClick={onOpen}>
       <span className={styles.label}>Куда</span>
 
       <div className={styles.searchField}>
-        <input type="text" placeholder="Куда ?" value={inputValue} className={styles.searchValue} onChange={(event) => setInputValue(event.target.value)} />
+        <input type="text" placeholder="Куда поедете?" value={inputValue} className={styles.searchValue} onChange={handleInputChange} />
       </div>
 
       {active && debouncedValue && filteredCities.length > 0 && (

@@ -54,31 +54,60 @@ const Booking = () => {
     <main className={styles.page}>
       <div className={styles.container}>
         {isConfirmed && (
-          <section>
+          <section className={styles.confirmation}>
+            <div className={styles.confirmationIcon}>✓</div>
+
             <h1>Бронирование подтверждено</h1>
 
-            <p>
-              {confirmedBooking.hotel.name} — {confirmedBooking.room.name}
-            </p>
+            <p className={styles.confirmationMessage}>Ваше бронирование успешно оформлено.</p>
 
-            <p>
-              {confirmedBooking.checkIn} — {confirmedBooking.checkOut}
-            </p>
+            <div className={styles.confirmationDetails}>
+              <div className={styles.confirmationDetail}>
+                <span>Отель</span>
+                <strong>{confirmedBooking.hotel.name}</strong>
+              </div>
 
-            <p>Номеров: {confirmedBooking.rooms}</p>
+              <div className={styles.confirmationDetail}>
+                <span>Номер</span>
+                <strong>{confirmedBooking.room.name}</strong>
+              </div>
 
-            <p>Итоговая стоимость: {confirmedTotalPrice} €</p>
+              <div className={styles.confirmationDetail}>
+                <span>Заезд</span>
+                <strong>{confirmedBooking.checkIn}</strong>
+              </div>
+
+              <div className={styles.confirmationDetail}>
+                <span>Выезд</span>
+                <strong>{confirmedBooking.checkOut}</strong>
+              </div>
+
+              <div className={styles.confirmationDetail}>
+                <span>Номеров</span>
+                <strong>{confirmedBooking.rooms}</strong>
+              </div>
+
+              <div className={styles.confirmationDetail}>
+                <span>Гостей</span>
+                <strong>{confirmedBooking.guests}</strong>
+              </div>
+            </div>
+
+            <div className={styles.confirmationTotal}>
+              <span>Итоговая стоимость</span>
+              <strong>{confirmedTotalPrice} €</strong>
+            </div>
           </section>
         )}
 
         {!isConfirmed && (
           <>
-            <h1>Бронирование</h1>
+            <h1 className={styles.title}>Бронирование</h1>
 
             <section className={styles.hotel}>
               <img src={booking.hotel.images[0]} alt={booking.hotel.name} className={styles.image} />
 
-              <div>
+              <div className={styles.hotelInfo}>
                 <h2>{booking.hotel.name}</h2>
                 <p>{booking.hotel.location}</p>
               </div>

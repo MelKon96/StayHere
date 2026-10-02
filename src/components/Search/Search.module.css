@@ -2,7 +2,8 @@
   position: relative;
   display: flex;
   align-items: center;
-  width: 60%;
+  width: 80%;
+  font-size: 14px;
   margin: 10px auto;
   background-color: white;
   border: 1px solid #dddddd;
@@ -61,6 +62,7 @@
   color: #717171;
   font: inherit;
   background: transparent;
+  white-space: nowrap;
 }
 
 .suggestions {
@@ -174,7 +176,7 @@
 }
 
 /* планшеты + мобилки */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .search {
     display: flex;
     flex-direction: column;

@@ -47,7 +47,7 @@ const Home = () => {
 
       <section className={styles.features}>
         <div className={styles.container}>
-          <h2 className={styles.sectionTitle}>Почему Stayly</h2>
+          <h2 className={styles.sectionTitle}>Почему Stayhere</h2>
 
           <div className={styles.featureGrid}>
             <article className={styles.feature}>

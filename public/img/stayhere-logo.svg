@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Плавное свечение вокруг домика -->
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Скругленный синий фон логотипа -->
+  <rect width="512" height="512" rx="120" fill="#000000" />
+
+  <!-- Группа элементов домика и пина увеличена на 70% и слегка приподнята (центр по Y изменен на 225) -->
+  <g filter="url(#glow)" transform="translate(256, 225) scale(1.70) translate(-256, -240)">
+    <!-- Крыша и дымоход -->
+    <path d="M211 169v-25h20v11l25-17 122 84-12 18-20-14v90H176v-90l-20 14-12-18z" fill="#f37023" />
+    <!-- Основание дома -->
+    <path d="M176 240h160v96H176z" fill="#f37023" />
+    <!-- Окошко с перекрестием -->
+    <g fill="#cacbcd">
+      <path d="M192 256h18v16h-18zM214 256h18v16h-18zM192 276h18v16h-18zM214 276h18v16h-18z" />
+    </g>
+    <!-- Белая геометка (пин) -->
+    <path d="M256 190c-26 0-48 22-48 48 0 34 48 76 48 76s48-42 48-76c0-26-22-48-48-48zm0 62c-8 0-14-6-14-14s6-14 14-14 14 6 14 14-6 14-14 14z" fill="#ffffff" />
+  </g>
+
+  <!-- Оригинальный текстовый блок STAY HERE (немного опущен вниз для баланса) -->
+  <g fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-weight="900" text-anchor="middle">
+    <text x="256" y="415" font-size="46" letter-spacing="4">STAY</text>
+    <text x="256" y="465" font-size="46" letter-spacing="4">HERE</text>
+  </g>
+</svg>

@@ -16,13 +16,16 @@
   gap: 10px;
   margin-bottom: 25px;
 }
+.group span {
+  font-size: 14px;
+}
 
 .group:last-child {
   margin-bottom: 0;
 }
 
 .group h3 {
-  margin: 0 0 5px;
+  margin: 0 0 2px;
   font-size: 15px;
 }
 

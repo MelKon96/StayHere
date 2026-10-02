@@ -5,8 +5,6 @@ import { useSelector } from "react-redux";
 const MyBookings = () => {
   const bookings = useSelector((state) => state.booking.bookings);
 
-  console.log(bookings);
-
   if (bookings.length === 0) {
     return (
       <div className={styles.myBookings}>
@@ -20,20 +18,40 @@ const MyBookings = () => {
     <div className={styles.myBookings}>
       <h1>Мои бронирования</h1>
 
-      <ul>
+      <ul className={styles.bookingsList}>
         {bookings.map((booking) => (
-          <li key={booking.id}>
-            <h2>{booking.hotel.name}</h2>
+          <li key={booking.id} className={styles.bookingCard}>
+            <div className={styles.bookingHeader}>
+              <h2>{booking.hotel.name}</h2>
+              <span className={styles.bookingStatus}>Забронировано</span>
+            </div>
 
-            <p>Номер: {booking.room.name}</p>
+            <div className={styles.bookingDetails}>
+              <div className={styles.detail}>
+                <span className={styles.label}>Номер</span>
+                <span className={styles.value}>{booking.room.name}</span>
+              </div>
 
-            <p>Дата заезда: {booking.checkIn}</p>
+              <div className={styles.detail}>
+                <span className={styles.label}>Заезд</span>
+                <span className={styles.value}>{booking.checkIn}</span>
+              </div>
 
-            <p>Дата выезда: {booking.checkOut}</p>
+              <div className={styles.detail}>
+                <span className={styles.label}>Выезд</span>
+                <span className={styles.value}>{booking.checkOut}</span>
+              </div>
 
-            <p>Гостей: {booking.guests}</p>
+              <div className={styles.detail}>
+                <span className={styles.label}>Гости</span>
+                <span className={styles.value}>{booking.guests}</span>
+              </div>
 
-            <p>Номеров: {booking.rooms}</p>
+              <div className={styles.detail}>
+                <span className={styles.label}>Номеров</span>
+                <span className={styles.value}>{booking.rooms}</span>
+              </div>
+            </div>
           </li>
         ))}
       </ul>

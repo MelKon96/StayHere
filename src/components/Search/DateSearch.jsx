@@ -12,7 +12,18 @@ export default function DateSearch({ active, onOpen }) {
   return (
     <div className={`${styles.item} ${active ? styles.active : ""}`} onClick={onOpen}>
       <span className={styles.label}>Когда</span>
-      <span className={styles.searchValue}>{checkIn && checkOut ? `${checkIn} — ${checkOut}` : checkIn ? `${checkIn} — Выберите выезд` : "Добавьте даты"}</span>
+
+      <span className={styles.searchValue}>
+        {checkIn && checkOut ? (
+          <span className={styles.dateRange}>
+            {checkIn} — {checkOut}
+          </span>
+        ) : checkIn ? (
+          <span className={styles.dateRange}>{checkIn} — Выберите выезд</span>
+        ) : (
+          "Добавьте даты"
+        )}
+      </span>
 
       {active && (
         <div className={styles.datePicker} onClick={(event) => event.stopPropagation()}>
