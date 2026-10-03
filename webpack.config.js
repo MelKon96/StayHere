@@ -14,7 +14,7 @@ export default {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
     clean: true,
-    publicPath: "/",
+    publicPath: "/StayHere/",
   },
 
   module: {

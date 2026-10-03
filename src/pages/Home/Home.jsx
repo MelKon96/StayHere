@@ -13,7 +13,7 @@ const Home = () => {
   return (
     <main className={styles.page}>
       <section className={styles.hero}>
-        <img className={styles.heroImage} src="/img/hero.avif" alt="" fetchPriority="high" />
+        <img className={styles.heroImage} src="/StayHere/img/hero.avif" alt="" fetchPriority="high" />
         <div className={styles.heroOverlay} />
         <div className={styles.content}>
           <span className={styles.subtitle}>{text.home.subtitle}</span>
