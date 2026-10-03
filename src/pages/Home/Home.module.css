@@ -21,13 +21,15 @@
 }
 
 .heroOverlay {
-  position: relative;
+  position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 1;
   background: linear-gradient(90deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2));
 }
 
 .content {
+  position: relative;
+  z-index: 2;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;

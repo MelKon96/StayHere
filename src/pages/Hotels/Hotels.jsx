@@ -13,7 +13,6 @@ const Hotels = () => {
 
   const city = useSelector((state) => state.search.city);
   const language = useSelector((state) => state.settings.language);
-  const currency = useSelector((state) => state.settings.currency);
 
   const text = translations[language];
 
@@ -63,7 +62,23 @@ const Hotels = () => {
   });
 
   if (isLoading) {
-    return <p>{text.hotels.loading}</p>;
+    return (
+      <main className={styles.hotels}>
+        <h1 className={styles.title}>{text.hotels.title}</h1>
+
+        <div className={styles.content}>
+          <aside className={styles.filters}>
+            <HotelFilters filters={filters} onFiltersChange={setFilters} />
+          </aside>
+
+          <section className={styles.list}>
+            {Array.from({ length: 6 }).map((_, index) => (
+              <HotelCard key={index} loading />
+            ))}
+          </section>
+        </div>
+      </main>
+    );
   }
 
   if (error) {
