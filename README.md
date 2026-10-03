@@ -108,14 +108,4 @@ HTML и CSS проверены средствами валидации.
 
 HTML — без ошибок валидации.
 CSS — без ошибок валидации.
-Структура проекта
-src/
-├── app/
-├── components/
-├── constants/
-├── features/
-├── hooks/
-├── pages/
-├── services/
-├── styles/
-└── utils/
+
