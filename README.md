@@ -19,18 +19,29 @@ SPA для поиска и бронирования отелей и апарта
 skeleton loading при загрузке списка отелей.
 
 Технологии:
+
 React
+
 React Router
+
 Redux Toolkit
+
 RTK Query
+
 Webpack
+
 Babel
+
 CSS Modules
+
 Git / GitHub
+
 DummyJSON API
 
 Основные зависимости:
+
 Dependencies
+
 react — библиотека для построения пользовательского интерфейса;
 react-dom — интеграция React с DOM;
 react-router-dom — маршрутизация приложения;
@@ -38,6 +49,7 @@ react-router-dom — маршрутизация приложения;
 react-redux — интеграция Redux с React.
 
 DevDependencies:
+
 webpack — сборка проекта;
 webpack-cli — запуск Webpack из командной строки;
 webpack-dev-server — локальный сервер разработки;
