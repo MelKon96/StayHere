@@ -8,10 +8,10 @@ export const hotelApi = createApi({
 
   endpoints: (builder) => ({
     getHotels: builder.query({
-      query: () => "/c6b7-453b-4dc9-a3aa",
+      query: () => "/c/c6b7-453b-4dc9-a3aa",
     }),
     getHotel: builder.query({
-      query: (id) => `/c6b7-453b-4dc9-a3aa/${id}`,
+      query: (id) => `/c/c6b7-453b-4dc9-a3aa/${id}`,
     }),
   }),
 });
