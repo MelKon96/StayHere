@@ -13,6 +13,22 @@ export default function DateSearch({ active, onOpen }) {
 
   const text = translations[language];
 
+  const handleCheckInChange = (event) => {
+    const newCheckIn = event.target.value;
+    dispatch(setCheckIn(newCheckIn));
+    if (checkOut && newCheckIn > checkOut) {
+      dispatch(setCheckOut(""));
+    }
+  };
+
+  const handleCheckOutChange = (event) => {
+    const newCheckOut = event.target.value;
+    if (checkIn && newCheckOut < checkIn) {
+      return;
+    }
+    dispatch(setCheckOut(newCheckOut));
+  };
+
   return (
     <div className={`${styles.item} ${active ? styles.active : ""}`} onClick={onOpen}>
       <span className={styles.label}>{text.search.dates}</span>
@@ -36,13 +52,13 @@ export default function DateSearch({ active, onOpen }) {
           <label>
             {text.search.checkIn}
 
-            <input type="date" value={checkIn || ""} onChange={(event) => dispatch(setCheckIn(event.target.value))} />
+            <input type="date" value={checkIn || ""} onChange={handleCheckInChange} />
           </label>
 
           <label>
             {text.search.checkOut}
 
-            <input type="date" value={checkOut || ""} min={checkIn || undefined} onChange={(event) => dispatch(setCheckOut(event.target.value))} />
+            <input type="date" value={checkOut || ""} min={checkIn || undefined} onChange={handleCheckOutChange} />
           </label>
         </div>
       )}

@@ -1,7 +1,6 @@
 import path from "path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import CopyWebpackPlugin from "copy-webpack-plugin";
-
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -24,7 +23,6 @@ export default {
         exclude: /node_modules/,
         use: "babel-loader",
       },
-
       {
         test: /\.module\.css$/,
         use: [
@@ -38,7 +36,6 @@ export default {
           },
         ],
       },
-
       {
         test: /\.css$/,
         exclude: /\.module\.css$/,
@@ -50,6 +47,12 @@ export default {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./public/index.html",
+      filename: "index.html",
+    }),
+
+    new HtmlWebpackPlugin({
+      template: "./public/index.html",
+      filename: "404.html",
     }),
 
     new CopyWebpackPlugin({
