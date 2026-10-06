@@ -1,5 +1,5 @@
 import AppRouter from "../../app/router";
-import Container from "../container/Container";
+import Container from "../Container/Container";
 
 const Main = () => {
   return (
