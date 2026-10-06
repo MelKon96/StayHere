@@ -8,7 +8,7 @@ import { setCurrency, setLanguage } from "../../features/settings/settingsSlice"
 import styles from "./Header.module.css";
 
 import Search from "../Search/Search";
-import Container from "../container/Container";
+import Container from "../Container/Container";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { translations } from "../../constants/translations";
 import { setCurrency, setLanguage } from "../../features/settings/settingsSlice";
-import Container from "../container/Container";
+import Container from "../Container/Container";
 
 import styles from "./Footer.module.css";
 
