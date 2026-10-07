@@ -1,9 +1,9 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 
-import { setGuests } from "../../features/search/searchSlice";
-import { translations } from "../../constants/translations";
+import { setGuests } from '../../features/search/searchSlice';
+import { translations } from '../../constants/translations';
 
-import styles from "./Search.module.css";
+import styles from './Search.module.css';
 
 export default function GuestsSearch({ active, onOpen }) {
   const dispatch = useDispatch();
@@ -21,10 +21,20 @@ export default function GuestsSearch({ active, onOpen }) {
     dispatch(setGuests(guests + 1));
   };
 
-  const guestLabel = language === "ru" ? (guests === 1 ? text.search.guest : text.search.guestsPlural) : guests === 1 ? text.search.guest : text.search.guestsPlural;
+  const guestLabel =
+    language === 'ru'
+      ? guests === 1
+        ? text.search.guest
+        : text.search.guestsPlural
+      : guests === 1
+        ? text.search.guest
+        : text.search.guestsPlural;
 
   return (
-    <div className={`${styles.item} ${active ? styles.active : ""}`} onClick={onOpen}>
+    <div
+      className={`${styles.item} ${active ? styles.active : ''}`}
+      onClick={onOpen}
+    >
       <span className={styles.label}>{text.search.who}</span>
 
       <span className={styles.searchValue}>
@@ -32,11 +42,18 @@ export default function GuestsSearch({ active, onOpen }) {
       </span>
 
       {active && (
-        <div className={styles.guestsPicker} onClick={(event) => event.stopPropagation()}>
+        <div
+          className={styles.guestsPicker}
+          onClick={(event) => event.stopPropagation()}
+        >
           <span>{text.search.guests}</span>
 
           <div className={styles.guestsControls}>
-            <button type="button" onClick={decreaseGuests} disabled={guests === 1}>
+            <button
+              type="button"
+              onClick={decreaseGuests}
+              disabled={guests === 1}
+            >
               −
             </button>
 

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import HotelCard from '../../components/HotelCard/HotelCard';
 import HotelFilters from '../../components/HotelFilters/HotelFilters';
 import { setHotelFilters } from '../../features/hotelFilters/hotelFiltersSlice';
-import {useFilteredHotels} from '../../hooks/useFilteredHotels';
+import { useFilteredHotels } from '../../hooks/useFilteredHotels';
 import { translations } from '../../constants/translations';
 
 import styles from './Hotels.module.css';
@@ -15,7 +15,8 @@ const Hotels = () => {
   const filters = useSelector((state) => state.hotelFilters);
   const text = translations[language];
 
-  const { hotels, isLoading, error } = useFilteredHotels();
+  const { hotels, isLoading, error, priceBounds, roomsBounds } =
+    useFilteredHotels();
 
   if (error) return <p>{text.hotels.error}</p>;
 
@@ -39,6 +40,8 @@ const Hotels = () => {
         <aside className={styles.filters}>
           <HotelFilters
             filters={filters}
+            priceBounds={priceBounds}
+            roomsBounds={roomsBounds}
             onFiltersChange={(next) => dispatch(setHotelFilters(next))}
           />
         </aside>

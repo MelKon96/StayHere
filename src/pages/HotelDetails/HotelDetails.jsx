@@ -54,7 +54,6 @@ const HotelDetails = () => {
             <span className={styles.category}>★ {hotel.category}</span>
           </div>
 
-    
           <div className={styles.amenities}>
             <h2>{text.hotels.details.amenities}</h2>
 

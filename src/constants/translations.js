@@ -22,6 +22,7 @@ export const translations = {
       guestsPlural: 'гостей',
       updating: 'Обновляем результаты…',
       found: 'Найдено отелей',
+      clear: 'Сброс',
     },
     home: {
       subtitle: 'Путешествуйте с комфортом',

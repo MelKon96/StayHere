@@ -3,30 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { setCheckIn, setCheckOut } from '../../features/search/searchSlice';
 import { translations } from '../../constants/translations';
+import {
+  toISO,
+  fromISO,
+  startOfMonth,
+  addMonths,
+  today,
+} from '../../utils/date';
 
 import styles from './Search.module.css';
-
-/* ---------- helpers: даты хранятся в Redux как строки "YYYY-MM-DD" ---------- */
-
-const pad = (n) => String(n).padStart(2, '0');
-
-const toISO = (date) =>
-  `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-
-const fromISO = (iso) => {
-  const [y, m, d] = iso.split('-').map(Number);
-  return new Date(y, m - 1, d);
-};
-
-const startOfMonth = (date) => new Date(date.getFullYear(), date.getMonth(), 1);
-
-const addMonths = (date, n) =>
-  new Date(date.getFullYear(), date.getMonth() + n, 1);
-
-const today = () => {
-  const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
-};
 
 // Сетка месяца: неделя начинается с понедельника, пустые ячейки = null
 const buildMonthCells = (monthDate) => {
@@ -97,7 +82,6 @@ export default function DateSearch({ active, onOpen, onClose }) {
   }, [active, onClose]);
 
   const handleDayClick = (iso) => {
-    // Нет заезда, либо диапазон уже выбран, либо клик раньше заезда → начинаем заново
     if (!checkIn || checkOut || iso <= checkIn) {
       dispatch(setCheckIn(iso));
       dispatch(setCheckOut(''));
@@ -116,7 +100,6 @@ export default function DateSearch({ active, onOpen, onClose }) {
 
   const canGoPrev = visibleMonth > startOfMonth(today());
 
-  // Конец диапазона для подсветки: выбранный выезд или дата под курсором
   const rangeEnd =
     checkOut || (checkIn && hovered && hovered > checkIn ? hovered : '');
 

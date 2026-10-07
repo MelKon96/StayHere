@@ -1,20 +1,27 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { setBookingCheckIn, setBookingCheckOut, setRooms, addBooking, clearBooking } from "../../features/booking/bookingSlice";
-import { translations } from "../../constants/translations";
-import { convertPrice, getCurrencySymbol } from "../../utils/currency";
+import {
+  setBookingCheckIn,
+  setBookingCheckOut,
+  setRooms,
+  addBooking,
+  clearBooking,
+} from '../../features/booking/bookingSlice';
+import { translations } from '../../constants/translations';
+import { convertPrice, getCurrencySymbol } from '../../utils/currency';
+import { calculateNights, addDays, getTodayISO } from '../../utils/date';
 
-import styles from "./Booking.module.css";
+import styles from './Booking.module.css';
 
 const Booking = () => {
+  const dispatch = useDispatch();
+
   const booking = useSelector((state) => state.booking.current);
   const currency = useSelector((state) => state.settings.currency);
   const language = useSelector((state) => state.settings.language);
 
   const text = translations[language];
-
-  const dispatch = useDispatch();
 
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [confirmedBooking, setConfirmedBooking] = useState(null);
@@ -38,28 +45,33 @@ const Booking = () => {
     );
   }
 
-  const calculateNights = (checkIn, checkOut) => {
-    if (!checkIn || !checkOut) {
-      return 0;
-    }
-
-    const difference = new Date(checkOut) - new Date(checkIn);
-
-    return Math.ceil(difference / (1000 * 60 * 60 * 24));
-  };
-
   const nights = calculateNights(booking.checkIn, booking.checkOut);
 
-  const totalPrice = booking.room?.pricePerNight * nights * booking.rooms;
+  const totalPrice =
+    (booking.room?.pricePerNight || 0) * nights * booking.rooms;
 
-  const confirmedNights = confirmedBooking ? calculateNights(confirmedBooking.checkIn, confirmedBooking.checkOut) : 0;
+  const confirmedNights = confirmedBooking
+    ? calculateNights(confirmedBooking.checkIn, confirmedBooking.checkOut)
+    : 0;
 
-  const confirmedTotalPrice = confirmedBooking ? confirmedBooking.room.pricePerNight * confirmedNights * confirmedBooking.rooms : 0;
+  const confirmedTotalPrice = confirmedBooking
+    ? confirmedBooking.room.pricePerNight *
+      confirmedNights *
+      confirmedBooking.rooms
+    : 0;
 
   const displayedTotalPrice = convertPrice(totalPrice, currency);
-  const displayedConfirmedTotalPrice = convertPrice(confirmedTotalPrice, currency);
+
+  const displayedConfirmedTotalPrice = convertPrice(
+    confirmedTotalPrice,
+    currency,
+  );
 
   const currencySymbol = getCurrencySymbol(currency);
+
+  const todayISO = getTodayISO();
+
+  const minCheckOutDate = booking.checkIn ? addDays(booking.checkIn, 1) : '';
 
   return (
     <main className={styles.page}>
@@ -70,7 +82,9 @@ const Booking = () => {
 
             <h1>{text.booking.confirmed}</h1>
 
-            <p className={styles.confirmationMessage}>{text.booking.successMessage}</p>
+            <p className={styles.confirmationMessage}>
+              {text.booking.successMessage}
+            </p>
 
             <div className={styles.confirmationDetails}>
               <div className={styles.confirmationDetail}>
@@ -119,7 +133,11 @@ const Booking = () => {
             <h1 className={styles.title}>{text.booking.title}</h1>
 
             <section className={styles.hotel}>
-              <img src={booking.hotel.images[0]} alt={booking.hotel.name} className={styles.image} />
+              <img
+                src={booking.hotel.images[0]}
+                alt={booking.hotel.name}
+                className={styles.image}
+              />
 
               <div className={styles.hotelInfo}>
                 <h2>{booking.hotel.name}</h2>
@@ -131,13 +149,21 @@ const Booking = () => {
               <span>{text.booking.rooms}</span>
 
               <div className={styles.roomsControls}>
-                <button type="button" onClick={() => dispatch(setRooms(booking.rooms - 1))} disabled={booking.rooms === 1}>
+                <button
+                  type="button"
+                  onClick={() => dispatch(setRooms(booking.rooms - 1))}
+                  disabled={booking.rooms === 1}
+                >
                   −
                 </button>
 
                 <span>{booking.rooms}</span>
 
-                <button type="button" onClick={() => dispatch(setRooms(booking.rooms + 1))} disabled={booking.rooms === booking.room.quantity}>
+                <button
+                  type="button"
+                  onClick={() => dispatch(setRooms(booking.rooms + 1))}
+                  disabled={booking.rooms === booking.room.quantity}
+                >
                   +
                 </button>
               </div>
@@ -147,14 +173,30 @@ const Booking = () => {
               <div>
                 <span>{text.booking.checkIn}</span>
 
-                <input type="date" value={booking.checkIn || ""} onChange={(event) => dispatch(setBookingCheckIn(event.target.value))} />
+                <input
+                  type="date"
+                  onKeyDown={(e) => e.preventDefault()}
+                  value={booking.checkIn || ''}
+                  min={todayISO}
+                  onChange={(event) =>
+                    dispatch(setBookingCheckIn(event.target.value))
+                  }
+                />
               </div>
 
               {booking.checkIn && (
                 <div>
                   <span>{text.booking.checkOut}</span>
 
-                  <input type="date" value={booking.checkOut || ""} min={new Date(new Date(booking.checkIn).getTime() + 86400000).toISOString().split("T")[0]} onChange={(event) => dispatch(setBookingCheckOut(event.target.value))} />
+                  <input
+                    type="date"
+                    onKeyDown={(e) => e.preventDefault()}
+                    value={booking.checkOut || ''}
+                    min={minCheckOutDate}
+                    onChange={(event) =>
+                      dispatch(setBookingCheckOut(event.target.value))
+                    }
+                  />
                 </div>
               )}
             </section>
@@ -178,7 +220,12 @@ const Booking = () => {
                 </strong>
               </div>
 
-              <button type="button" className={styles.confirmButton} onClick={handleConfirm} disabled={!booking.checkIn || !booking.checkOut}>
+              <button
+                type="button"
+                className={styles.confirmButton}
+                onClick={handleConfirm}
+                disabled={!booking.checkIn || !booking.checkOut}
+              >
                 {text.booking.confirm}
               </button>
             </section>

@@ -8,5 +8,5 @@ export const convertPrice = (price, currency) => {
 };
 
 export const getCurrencySymbol = (currency) => {
-  return currency === "USD" ? "$" : "€";
+  return currency === 'USD' ? '$' : '€';
 };

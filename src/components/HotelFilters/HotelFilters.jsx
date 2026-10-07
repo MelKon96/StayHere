@@ -1,3 +1,4 @@
+import { useEffect, useEffectEvent } from 'react';
 import { useSelector } from 'react-redux';
 
 import { translations } from '../../constants/translations';
@@ -7,12 +8,24 @@ import styles from './HotelFilters.module.css';
 const CATEGORIES = [5, 4, 3, 2, 1];
 const AMENITIES = ['wifi', 'airConditioning', 'pool', 'parking'];
 
-const HotelFilters = ({ filters, onFiltersChange }) => {
+const HotelFilters = ({
+  filters,
+  onFiltersChange,
+  priceBounds,
+  roomsBounds,
+}) => {
   const currency = useSelector((state) => state.settings.currency);
   const language = useSelector((state) => state.settings.language);
 
   const text = translations[language].hotels.filters;
 
+  const boundsByField = {
+    minPrice: priceBounds,
+    maxPrice: priceBounds,
+    minRooms: roomsBounds,
+    maxRooms: roomsBounds,
+  };
+  console.log('roomsBounds:', roomsBounds);
   const getStarsLabel = (count) => {
     if (count === 1) return text.star;
     if (language === 'ru' && count !== 5) return text.starsPlural;
@@ -34,6 +47,70 @@ const HotelFilters = ({ filters, onFiltersChange }) => {
     handleChange(field, next);
   };
 
+  const clamp = (field, value) => {
+    const bounds = boundsByField[field];
+    if (!bounds) return value;
+    return Math.min(Math.max(value, bounds.min), bounds.max);
+  };
+
+  const clampFiltersToBounds = useEffectEvent(() => {
+    const next = { ...filters };
+    let changed = false;
+
+    Object.keys(boundsByField).forEach((field) => {
+      if (!boundsByField[field] || filters[field] === '') return;
+
+      const current = Number(filters[field]);
+      const clamped = clamp(field, current);
+
+      if (clamped !== current) {
+        next[field] = String(clamped);
+        changed = true;
+      }
+    });
+
+    if (changed) onFiltersChange(next);
+  });
+
+  useEffect(() => {
+    clampFiltersToBounds();
+  }, [priceBounds?.min, priceBounds?.max, roomsBounds?.min, roomsBounds?.max]);
+
+  const handleRangeBlur = (field) => {
+    const raw = filters[field];
+    if (raw === '' || !boundsByField[field]) return;
+
+    const isMin = field.startsWith('min');
+    const counterpart = isMin
+      ? field.replace('min', 'max')
+      : field.replace('max', 'min');
+
+    let value = clamp(field, Number(raw));
+
+    if (filters[counterpart] !== '') {
+      value = isMin
+        ? Math.min(value, Number(filters[counterpart]))
+        : Math.max(value, Number(filters[counterpart]));
+    }
+
+    if (value !== Number(raw)) handleChange(field, String(value));
+  };
+
+  const getRangeProps = (field) => {
+    const bounds = boundsByField[field];
+    const isMin = field.startsWith('min');
+
+    return {
+      type: 'number',
+      min: bounds?.min ?? 0,
+      max: bounds?.max,
+      placeholder: bounds ? String(isMin ? bounds.min : bounds.max) : '',
+      value: filters[field],
+      onChange: (e) => handleChange(field, e.target.value),
+      onBlur: () => handleRangeBlur(field),
+    };
+  };
+
   return (
     <div className={styles.filters}>
       <h2 className={styles.title}>{text.title}</h2>
@@ -44,22 +121,8 @@ const HotelFilters = ({ filters, onFiltersChange }) => {
         </h3>
 
         <div className={styles.priceInputs}>
-          <input
-            type="number"
-            min="0"
-            step="10"
-            placeholder={text.from}
-            value={filters.minPrice}
-            onChange={(e) => handleChange('minPrice', e.target.value)}
-          />
-          <input
-            type="number"
-            min="0"
-            step="10"
-            placeholder={text.to}
-            value={filters.maxPrice}
-            onChange={(e) => handleChange('maxPrice', e.target.value)}
-          />
+          <input {...getRangeProps('minPrice')} step="10" />
+          <input {...getRangeProps('maxPrice')} step="10" />
         </div>
       </div>
 
@@ -84,20 +147,8 @@ const HotelFilters = ({ filters, onFiltersChange }) => {
         <span>{text.totalRooms}</span>
 
         <div className={styles.priceInputs}>
-          <input
-            type="number"
-            min="0"
-            placeholder={text.from}
-            value={filters.minRooms}
-            onChange={(e) => handleChange('minRooms', e.target.value)}
-          />
-          <input
-            type="number"
-            min="0"
-            placeholder={text.to}
-            value={filters.maxRooms}
-            onChange={(e) => handleChange('maxRooms', e.target.value)}
-          />
+          <input {...getRangeProps('minRooms')} />
+          <input {...getRangeProps('maxRooms')} />
         </div>
       </div>
 

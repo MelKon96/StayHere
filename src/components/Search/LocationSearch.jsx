@@ -33,7 +33,6 @@ export default function LocationSearch({ active, onOpen, onClose }) {
   const handleInputChange = (event) => {
     const value = event.target.value;
     setInputValue(value);
-
     if (!value) dispatch(setCity(''));
   };
 
