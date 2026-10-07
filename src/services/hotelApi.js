@@ -8,12 +8,13 @@ export const hotelApi = createApi({
 
   endpoints: (builder) => ({
     getHotels: builder.query({
-      query: () => "/c/e5b6-e719-4188-b332",
+      query: () => "/c/c6b7-453b-4dc9-a3aa",
     }),
     getHotel: builder.query({
-      query: (id) => `/c/e5b6-e719-4188-b332/${id}`,
+      query: (id) => `/c/c6b7-453b-4dc9-a3aa/${id}`,
     }),
   }),
 });
 
 export const { useGetHotelsQuery, useGetHotelQuery } = hotelApi;
+//https://dummyjson.com/c/e5b6-e719-4188-b332

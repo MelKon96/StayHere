@@ -1,12 +1,12 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { translations } from "../../constants/translations";
-import { setBooking } from "../../features/booking/bookingSlice";
-import { useGetHotelsQuery } from "../../services/hotelApi";
-import { convertPrice, getCurrencySymbol } from "../../utils/currency";
+import { translations } from '../../constants/translations';
+import { setBooking } from '../../features/booking/bookingSlice';
+import { useGetHotelsQuery } from '../../services/hotelApi';
+import { convertPrice, getCurrencySymbol } from '../../utils/currency';
 
-import styles from "./HotelDetails.module.css";
+import styles from './HotelDetails.module.css';
 
 const HotelDetails = () => {
   const { id } = useParams();
@@ -54,16 +54,19 @@ const HotelDetails = () => {
             <span className={styles.category}>★ {hotel.category}</span>
           </div>
 
-          <p className={styles.description}>{hotel.description}</p>
-
+    
           <div className={styles.amenities}>
             <h2>{text.hotels.details.amenities}</h2>
 
             <div className={styles.amenitiesList}>
               {hotel.amenities.wifi && <span>Wi-Fi</span>}
-              {hotel.amenities.airConditioning && <span>{text.hotels.filters.airConditioning}</span>}
+              {hotel.amenities.airConditioning && (
+                <span>{text.hotels.filters.airConditioning}</span>
+              )}
               {hotel.amenities.pool && <span>{text.hotels.filters.pool}</span>}
-              {hotel.amenities.parking && <span>{text.hotels.filters.parking}</span>}
+              {hotel.amenities.parking && (
+                <span>{text.hotels.filters.parking}</span>
+              )}
             </div>
           </div>
 
@@ -80,7 +83,8 @@ const HotelDetails = () => {
                       <h3>{room.name}</h3>
 
                       <p>
-                        {text.hotels.details.capacity} {room.capacity} {text.hotels.details.guests}
+                        {text.hotels.details.capacity} {room.capacity}{' '}
+                        {text.hotels.details.guests}
                       </p>
 
                       <p>{room.beds}</p>
@@ -88,7 +92,8 @@ const HotelDetails = () => {
 
                     <div className={styles.roomInfo}>
                       <span className={styles.price}>
-                        {price.toFixed(2)} {currencySymbol} {text.hotels.details.perNight}
+                        {price.toFixed(2)} {currencySymbol}{' '}
+                        {text.hotels.details.perNight}
                       </span>
 
                       <span className={styles.quantity}>
@@ -108,7 +113,7 @@ const HotelDetails = () => {
                             }),
                           );
 
-                          navigate("/booking");
+                          navigate('/booking');
                         }}
                       >
                         {text.hotels.details.book}

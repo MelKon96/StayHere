@@ -1,10 +1,15 @@
 .search {
+  --accent: #0057b8;
+  --range: #dbeafe;
+  --popup-border: 1px solid #dddddd;
+  --popup-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+
   position: relative;
   display: flex;
   align-items: center;
-  width: 80%;
-  font-size: 14px;
+  width: 60%;
   margin: 10px auto;
+  font-size: 14px;
   background-color: white;
   border: 1px solid #dddddd;
   border-radius: var(--border-radius-main);
@@ -17,7 +22,7 @@
 }
 
 .item {
-  position: relative;
+  position: relative; /* родитель для всех модалок */
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -65,20 +70,26 @@
   white-space: nowrap;
 }
 
-.suggestions {
+.suggestions,
+.datePicker,
+.guestsPicker {
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
-  z-index: 10;
+  z-index: 50;
+  background-color: white;
+  border: var(--popup-border);
+  border-radius: 16px;
+  box-shadow: var(--popup-shadow);
+  cursor: default;
+}
+
+.suggestions {
   display: flex;
   flex-direction: column;
   width: 100%;
   min-width: 200px;
   padding: 8px;
-  background-color: white;
-  border: 1px solid #dddddd;
-  border-radius: 16px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
 
 .suggestions button {
@@ -94,48 +105,14 @@
   background-color: #f5f5f5;
 }
 
-.datePicker {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  z-index: 10;
-  display: flex;
-  gap: 16px;
-  padding: 16px;
-  background-color: white;
-  border: 1px solid #dddddd;
-  border-radius: 16px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
-}
-
-.datePicker label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.datePicker input {
-  padding: 8px;
-  border: 1px solid #dddddd;
-  border-radius: 8px;
-}
-
 .guestsPicker {
-  position: absolute;
-  top: calc(100% + 8px);
+  left: auto;
   right: 0;
-  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-width: 220px;
   padding: 16px;
-  background-color: white;
-  border: 1px solid #dddddd;
-  border-radius: 16px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
 
 .guestsControls {
@@ -159,26 +136,183 @@
   cursor: default;
 }
 
-.searchButton {
-  padding: 12px 20px;
-  margin-right: 5px;
-  border: none;
-  border-radius: var(--border-radius-main);
-  background-color: #222;
-  color: white;
-  font: inherit;
+.datePicker {
+  top: calc(100% + 12px);
+  padding: 16px 20px 12px;
+  border-color: #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+}
+
+.calendarHeader {
+  position: absolute;
+  top: 14px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.calendarNav {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.calendarNav:hover:not(:disabled) {
+  background: #f0f0f0;
+}
+
+.calendarNav:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.calendarMonths {
+  display: flex;
+  gap: 32px;
+}
+
+.calendarMonth {
+  width: 280px;
+}
+
+.calendarMonthTitle {
+  margin-bottom: 12px;
+  text-align: center;
   font-weight: 600;
+  text-transform: capitalize;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: 2px;
+}
+
+.calendarWeekday {
+  padding-bottom: 6px;
+  text-align: center;
+  font-size: 12px;
+  color: #6b6b6b;
+}
+
+/* Дни */
+
+.calendarDay {
+  position: relative;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  font: inherit;
   cursor: pointer;
 }
 
-.searchButton:hover {
-  background-color: #333;
+.calendarDay:hover:not(:disabled):not(.calendarDaySelected) {
+  background: #e7f0fb;
 }
 
-/* планшеты + мобилки */
+.calendarDayToday {
+  font-weight: 700;
+}
+
+.calendarDayDisabled {
+  color: #c4c4c4;
+  text-decoration: line-through;
+  cursor: default;
+}
+
+.calendarDayInRange {
+  background: var(--range);
+}
+
+.calendarDaySelected {
+  background: var(--accent);
+  color: #fff;
+}
+
+.calendarDayStart {
+  background: linear-gradient(to right, transparent 50%, var(--range) 50%);
+}
+
+.calendarDayEnd {
+  background: linear-gradient(to left, transparent 50%, var(--range) 50%);
+}
+
+.calendarDayStart.calendarDaySelected,
+.calendarDayEnd.calendarDaySelected {
+  z-index: 0;
+}
+
+.calendarDayStart.calendarDaySelected::before,
+.calendarDayEnd.calendarDaySelected::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 50%;
+  z-index: -1;
+  width: 40px;
+  height: 40px;
+  margin-left: -20px;
+  background: var(--accent);
+}
+
+.calendarFooter {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #eee;
+}
+
+.calendarClear {
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+}
+
+.search {
+  position: relative;
+}
+
+.resultsHint {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+
+  padding: 8px 16px;
+  font-size: 14px;
+  white-space: nowrap;
+  color: #fff;
+  background: #222;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  animation: hintIn 0.2s ease;
+}
+
+.resultsHint::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background: #222;
+  transform: translateX(-50%) rotate(45deg);
+}
+
 @media (max-width: 1024px) {
   .search {
-    display: flex;
     flex-direction: column;
     align-items: stretch;
     width: 100%;
@@ -200,48 +334,65 @@
   .suggestions,
   .datePicker,
   .guestsPicker {
-    position: static;
+    top: 100%;
+    right: auto;
+    left: 0;
     width: 100%;
     min-width: 0;
-    margin-top: 8px;
+    max-width: none;
     box-sizing: border-box;
-  }
-
-  .suggestions {
-    padding: 8px;
-  }
-
-  .datePicker {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 12px;
-  }
-
-  .datePicker input {
-    width: 100%;
-    box-sizing: border-box;
+    transform: none;
   }
 
   .guestsPicker {
-    display: flex;
     padding: 12px;
+  }
+
+  .datePicker {
+    padding: 16px 12px 12px;
+  }
+
+  .calendarMonths {
+    justify-content: center;
+  }
+
+  .calendarMonth {
+    flex: 1;
+    width: auto;
+    max-width: 360px;
   }
 
   .searchButton {
     width: 100%;
+    margin-right: 0;
     padding: 14px 20px;
     border-radius: 0 0 20px 20px;
   }
 }
-/* мобилки с узким экраном */
+
+@media (max-width: 720px) {
+  .calendarSecondMonth {
+    display: none;
+  }
+
+  .calendarMonth {
+    max-width: none;
+  }
+}
+
 @media (max-width: 480px) {
   .item {
     padding: 11px 14px;
   }
+}
 
-  .datePicker,
-  .guestsPicker {
-    margin-top: 8px;
+@keyframes hintIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -4px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
   }
 }

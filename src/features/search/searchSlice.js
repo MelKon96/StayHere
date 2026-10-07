@@ -1,14 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  city: "",
+  city: '',
   guests: 1,
   checkIn: null,
   checkOut: null,
 };
 
 const searchSlice = createSlice({
-  name: "search",
+  name: 'search',
   initialState,
   reducers: {
     setCity: (state, action) => {
@@ -24,11 +24,15 @@ const searchSlice = createSlice({
     setCheckOut: (state, action) => {
       state.checkOut = action.payload;
     },
-    applySearch: (state) => {
-      state.appliedGuests = state.guests;
+    resetSearch: (state) => {
+      state.city = '';
+      state.guests = 1;
+      state.checkIn = null;
+      state.checkOut = null;
     },
   },
 });
 
-export const { setCity, setGuests, setCheckIn, setCheckOut, applySearch } = searchSlice.actions;
+export const { setCity, setGuests, setCheckIn, setCheckOut, resetSearch } =
+  searchSlice.actions;
 export default searchSlice.reducer;

@@ -1,108 +1,119 @@
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux';
 
-import { translations } from "../../constants/translations";
+import { translations } from '../../constants/translations';
 
-import styles from "./HotelFilters.module.css";
+import styles from './HotelFilters.module.css';
+
+const CATEGORIES = [5, 4, 3, 2, 1];
+const AMENITIES = ['wifi', 'airConditioning', 'pool', 'parking'];
 
 const HotelFilters = ({ filters, onFiltersChange }) => {
   const currency = useSelector((state) => state.settings.currency);
   const language = useSelector((state) => state.settings.language);
 
-  const text = translations[language];
+  const text = translations[language].hotels.filters;
 
-  const handlePriceChange = (field, value) => {
-    onFiltersChange({
-      ...filters,
-      [field]: value,
-    });
+  const getStarsLabel = (count) => {
+    if (count === 1) return text.star;
+    if (language === 'ru' && count !== 5) return text.starsPlural;
+    return text.stars;
   };
 
-  const handleRoomsChange = (field, value) => {
-    onFiltersChange({
-      ...filters,
-      [field]: value,
-    });
-  };
+  const getAmenityLabel = (amenity) =>
+    amenity === 'wifi' ? 'Wi-Fi' : text[amenity];
 
-  const handleCategoryChange = (category) => {
-    const categories = filters.categories.includes(category) ? filters.categories.filter((item) => item !== category) : [...filters.categories, category];
+  const handleChange = (field, value) =>
+    onFiltersChange({ ...filters, [field]: value });
 
-    onFiltersChange({
-      ...filters,
-      categories,
-    });
-  };
+  const toggleItem = (field, item) => {
+    const list = filters[field];
+    const next = list.includes(item)
+      ? list.filter((value) => value !== item)
+      : [...list, item];
 
-  const handleAmenityChange = (amenity) => {
-    const amenities = filters.amenities.includes(amenity) ? filters.amenities.filter((item) => item !== amenity) : [...filters.amenities, amenity];
-
-    onFiltersChange({
-      ...filters,
-      amenities,
-    });
+    handleChange(field, next);
   };
 
   return (
     <div className={styles.filters}>
-      <h2 className={styles.title}>{text.hotels.filters.title}</h2>
+      <h2 className={styles.title}>{text.title}</h2>
 
       <div className={styles.group}>
         <h3>
-          {text.hotels.filters.pricePerNight} {currency === "USD" ? "$" : "€"}
+          {text.pricePerNight} {currency === 'USD' ? '$' : '€'}
         </h3>
 
         <div className={styles.priceInputs}>
-          <input type="number" placeholder={text.hotels.filters.from} min="0" value={filters.minPrice} step="10" onChange={(event) => handlePriceChange("minPrice", event.target.value)} />
-
-          <input type="number" placeholder={text.hotels.filters.to} min="0" value={filters.maxPrice} step="10" onChange={(event) => handlePriceChange("maxPrice", event.target.value)} />
+          <input
+            type="number"
+            min="0"
+            step="10"
+            placeholder={text.from}
+            value={filters.minPrice}
+            onChange={(e) => handleChange('minPrice', e.target.value)}
+          />
+          <input
+            type="number"
+            min="0"
+            step="10"
+            placeholder={text.to}
+            value={filters.maxPrice}
+            onChange={(e) => handleChange('maxPrice', e.target.value)}
+          />
         </div>
       </div>
 
       <div className={styles.group}>
-        <h3>{text.hotels.filters.category}</h3>
+        <h3>{text.category}</h3>
 
-        {[5, 4, 3, 2, 1].map((category) => (
+        {CATEGORIES.map((category) => (
           <label key={category}>
-            <input type="checkbox" checked={filters.categories.includes(category)} onChange={() => handleCategoryChange(category)} />
-            {category} {language === "ru" ? (category === 1 ? text.hotels.filters.star : category === 5 ? text.hotels.filters.stars : text.hotels.filters.starsPlural) : category === 1 ? text.hotels.filters.star : text.hotels.filters.stars}
+            <input
+              type="checkbox"
+              checked={filters.categories.includes(category)}
+              onChange={() => toggleItem('categories', category)}
+            />
+            {category} {getStarsLabel(category)}
           </label>
         ))}
       </div>
 
       <div className={styles.group}>
-        <h3>{text.hotels.filters.hotelSize}</h3>
+        <h3>{text.hotelSize}</h3>
 
-        <span>{text.hotels.filters.totalRooms}</span>
+        <span>{text.totalRooms}</span>
 
         <div className={styles.priceInputs}>
-          <input type="number" placeholder={text.hotels.filters.from} min="0" value={filters.minRooms} onChange={(event) => handleRoomsChange("minRooms", event.target.value)} />
-
-          <input type="number" placeholder={text.hotels.filters.to} min="0" value={filters.maxRooms} onChange={(event) => handleRoomsChange("maxRooms", event.target.value)} />
+          <input
+            type="number"
+            min="0"
+            placeholder={text.from}
+            value={filters.minRooms}
+            onChange={(e) => handleChange('minRooms', e.target.value)}
+          />
+          <input
+            type="number"
+            min="0"
+            placeholder={text.to}
+            value={filters.maxRooms}
+            onChange={(e) => handleChange('maxRooms', e.target.value)}
+          />
         </div>
       </div>
 
       <div className={styles.group}>
-        <h3>{text.hotels.filters.amenities}</h3>
+        <h3>{text.amenities}</h3>
 
-        <label>
-          <input type="checkbox" checked={filters.amenities.includes("wifi")} onChange={() => handleAmenityChange("wifi")} />
-          Wi-Fi
-        </label>
-
-        <label>
-          <input type="checkbox" checked={filters.amenities.includes("airConditioning")} onChange={() => handleAmenityChange("airConditioning")} />
-          {text.hotels.filters.airConditioning}
-        </label>
-
-        <label>
-          <input type="checkbox" checked={filters.amenities.includes("pool")} onChange={() => handleAmenityChange("pool")} />
-          {text.hotels.filters.pool}
-        </label>
-
-        <label>
-          <input type="checkbox" checked={filters.amenities.includes("parking")} onChange={() => handleAmenityChange("parking")} />
-          {text.hotels.filters.parking}
-        </label>
+        {AMENITIES.map((amenity) => (
+          <label key={amenity}>
+            <input
+              type="checkbox"
+              checked={filters.amenities.includes(amenity)}
+              onChange={() => toggleItem('amenities', amenity)}
+            />
+            {getAmenityLabel(amenity)}
+          </label>
+        ))}
       </div>
     </div>
   );
