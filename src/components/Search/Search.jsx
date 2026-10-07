@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useFilteredHotels } from '../../hooks/useFilteredHotels';
 import { translations } from '../../constants/translations';
 
@@ -13,6 +13,9 @@ import styles from './Search.module.css';
 const HINT_DURATION = 5000;
 
 export default function Search() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const language = useSelector((state) => state.settings.language);
   const text = translations[language].search;
 
@@ -51,6 +54,7 @@ export default function Search() {
     const handleClickOutside = (event) => {
       if (!searchRef.current?.contains(event.target)) setActiveItem(null);
     };
+
     const handleEscape = (event) => {
       if (event.key === 'Escape') setActiveItem(null);
     };
@@ -66,6 +70,7 @@ export default function Search() {
 
   useEffect(() => {
     const prev = prevFilters.current;
+
     if (prev.city === city && prev.hotelFilters === hotelFilters) return;
 
     prevFilters.current = { city, hotelFilters };
@@ -79,6 +84,7 @@ export default function Search() {
   const close = () => setActiveItem(null);
 
   const showHint = hintVisible && !isLoading && activeItem === null;
+  const isHotelsPage = location.pathname === '/hotels';
 
   return (
     <div ref={searchRef} className={styles.search}>
@@ -87,17 +93,28 @@ export default function Search() {
         onOpen={() => setActiveItem('location')}
         onClose={close}
       />
+
       <DateSearch
         active={activeItem === 'date'}
         onOpen={() => setActiveItem('date')}
       />
+
       <GuestsSearch
         active={activeItem === 'guests'}
         onOpen={() => setActiveItem('guests')}
       />
 
       {showHint && (
-        <div className={styles.resultsHint} role="status" aria-live="polite">
+        <div
+          className={`${styles.resultsHint} ${
+            !isHotelsPage ? styles.clickable : ''
+          }`}
+          {...(!isHotelsPage && {
+            onClick: () => navigate('/hotels'),
+          })}
+          role="status"
+          aria-live="polite"
+        >
           {`${text.found}: ${hotels.length}`}
         </div>
       )}

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setCity } from '../../features/search/searchSlice';
@@ -11,10 +11,14 @@ import styles from './Search.module.css';
 export default function LocationSearch({ active, onOpen, onClose }) {
   const dispatch = useDispatch();
   const language = useSelector((state) => state.settings.language);
+  const city = useSelector((state) => state.search.city);
   const text = translations[language].search;
 
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(city);
   const debouncedValue = useDebounce(inputValue, 300);
+  useEffect(() => {
+    setInputValue(city);
+  }, [city]);
 
   const { data: hotels = [] } = useGetHotelsQuery();
 
@@ -30,7 +34,6 @@ export default function LocationSearch({ active, onOpen, onClose }) {
     const value = event.target.value;
     setInputValue(value);
 
-    // Если поле очистили, снимаем фильтр по городу
     if (!value) dispatch(setCity(''));
   };
 

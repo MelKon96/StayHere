@@ -1,15 +1,23 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { destinations } from '../../constants/destinations';
 import { translations } from '../../constants/translations';
+import { setCity } from '../../features/search/searchSlice';
 
 import styles from './Home.module.css';
 
 const Home = () => {
+  const navigate = useNavigate();
   const language = useSelector((state) => state.settings.language);
-
+  const dispatch = useDispatch();
   const text = translations[language];
 
+  const handleDestinationClick = (location) => {
+    dispatch(setCity(location));
+    navigate('/hotels');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
   return (
     <main className={styles.page}>
       <section className={styles.hero}>
@@ -41,7 +49,12 @@ const Home = () => {
 
           <div className={styles.destinationGrid}>
             {destinations.map((destination) => (
-              <article key={destination.key} className={styles.destination}>
+              <button
+                key={destination.key}
+                type="button"
+                className={styles.destination}
+                onClick={() => handleDestinationClick(destination.location)}
+              >
                 <img
                   src={destination.image}
                   alt={text.home.destinations[destination.key].city}
@@ -51,7 +64,7 @@ const Home = () => {
                   <h3>{text.home.destinations[destination.key].city}</h3>
                   <p>{text.home.destinations[destination.key].country}</p>
                 </div>
-              </article>
+              </button>
             ))}
           </div>
         </div>

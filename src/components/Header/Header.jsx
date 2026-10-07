@@ -1,14 +1,17 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-import { translations } from "../../constants/translations";
-import { setCurrency, setLanguage } from "../../features/settings/settingsSlice";
+import { translations } from '../../constants/translations';
+import {
+  setCurrency,
+  setLanguage,
+} from '../../features/settings/settingsSlice';
 
-import styles from "./Header.module.css";
+import styles from './Header.module.css';
 
-import Search from "../Search/Search";
-import Container from "../Container/Container";
+import Search from '../Search/Search';
+import Container from '../Container/Container';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,14 +31,13 @@ const Header = () => {
     setIsMenuOpen((prev) => !prev);
   };
 
- 
   const handleSettingChange = (type, value) => {
-    if (type === "language") {
+    if (type === 'language') {
       dispatch(setLanguage(value));
-      localStorage.setItem("stayhere_language", value);
+      localStorage.setItem('stayhere_language', value);
     } else {
       dispatch(setCurrency(value));
-      localStorage.setItem("stayhere_currency", value);
+      localStorage.setItem('stayhere_currency', value);
     }
   };
 
@@ -55,27 +57,56 @@ const Header = () => {
 
           <div className={styles.actions}>
             <div className={styles.languages}>
-              <button type="button" className={`${styles.flagButton} ${language === "ru" ? styles.active : ""}`} onClick={() => handleSettingChange("language", "ru")} aria-label="Русский" title="Русский">
+              <button
+                type="button"
+                className={`${styles.flagButton} ${language === 'ru' ? styles.active : ''}`}
+                onClick={() => handleSettingChange('language', 'ru')}
+                aria-label="Русский"
+                title="Русский"
+              >
                 🇷🇺
               </button>
 
-              <button type="button" className={`${styles.flagButton} ${language === "en" ? styles.active : ""}`} onClick={() => handleSettingChange("language", "en")} aria-label="English" title="English">
+              <button
+                type="button"
+                className={`${styles.flagButton} ${language === 'en' ? styles.active : ''}`}
+                onClick={() => handleSettingChange('language', 'en')}
+                aria-label="English"
+                title="English"
+              >
                 en
               </button>
             </div>
 
             <div className={styles.currencies}>
-              <button type="button" className={`${styles.currencyButton} ${currency === "EUR" ? styles.active : ""}`} onClick={() => handleSettingChange("currency", "EUR")}>
+              <button
+                type="button"
+                className={`${styles.currencyButton} ${currency === 'EUR' ? styles.active : ''}`}
+                onClick={() => handleSettingChange('currency', 'EUR')}
+              >
                 EUR
               </button>
 
-              <button type="button" className={`${styles.currencyButton} ${currency === "USD" ? styles.active : ""}`} onClick={() => handleSettingChange("currency", "USD")}>
+              <button
+                type="button"
+                className={`${styles.currencyButton} ${currency === 'USD' ? styles.active : ''}`}
+                onClick={() => handleSettingChange('currency', 'USD')}
+              >
                 USD
               </button>
             </div>
           </div>
 
-          <button type="button" className={styles.menuButton} aria-label={isMenuOpen ? text.header.closeMenu : text.header.openMenu} aria-expanded={isMenuOpen} aria-controls="mobile-navigation" onClick={toggleMenu}>
+          <button
+            type="button"
+            className={styles.menuButton}
+            aria-label={
+              isMenuOpen ? text.header.closeMenu : text.header.openMenu
+            }
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation"
+            onClick={toggleMenu}
+          >
             ☰
           </button>
 
@@ -94,12 +125,28 @@ const Header = () => {
               </Link>
 
               <div className={styles.mobileSettings}>
-                <button type="button" onClick={() => handleSettingChange("language", language === "ru" ? "en" : "ru")}>
-                  {language === "ru" ? "Русский" : "English"}
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleSettingChange(
+                      'language',
+                      language === 'ru' ? 'en' : 'ru',
+                    )
+                  }
+                >
+                  {language === 'ru' ? 'Русский' : 'English'}
                 </button>
 
-                <button type="button" onClick={() => handleSettingChange("currency", currency === "EUR" ? "USD" : "EUR")}>
-                  {currency === "EUR" ? "EUR €" : "USD $"}
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleSettingChange(
+                      'currency',
+                      currency === 'EUR' ? 'USD' : 'EUR',
+                    )
+                  }
+                >
+                  {currency === 'EUR' ? 'EUR €' : 'USD $'}
                 </button>
               </div>
             </nav>

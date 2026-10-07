@@ -1,10 +1,10 @@
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-import { translations } from "../../constants/translations";
-import { convertPrice, getCurrencySymbol } from "../../utils/currency";
+import { translations } from '../../constants/translations';
+import { convertPrice, getCurrencySymbol } from '../../utils/currency';
 
-import styles from "./HotelCard.module.css";
+import styles from './HotelCard.module.css';
 
 const HotelCard = ({ hotel, loading = false }) => {
   const currency = useSelector((state) => state.settings.currency);
@@ -34,14 +34,18 @@ const HotelCard = ({ hotel, loading = false }) => {
     );
   }
 
-  const cheapestRoom = hotel.roomTypes.reduce((cheapest, room) => (room.pricePerNight < cheapest.pricePerNight ? room : cheapest));
+  const cheapestRoom = hotel.roomTypes.reduce((cheapest, room) =>
+    room.pricePerNight < cheapest.pricePerNight ? room : cheapest,
+  );
 
   const price = convertPrice(cheapestRoom.pricePerNight, currency);
   const currencySymbol = getCurrencySymbol(currency);
 
   return (
     <article className={styles.card}>
-      <img src={hotel.images[0]} alt={hotel.name} className={styles.image} />
+      <Link to={`/hotels/${hotel.id}`} className={styles.imageLink}>
+        <img src={hotel.images[0]} alt={hotel.name} className={styles.image} />
+      </Link>
 
       <div className={styles.content}>
         <div className={styles.header}>
@@ -54,7 +58,8 @@ const HotelCard = ({ hotel, loading = false }) => {
         </div>
 
         <p className={styles.price}>
-          {text.hotels.card.from} {price.toFixed(2)} {currencySymbol} {text.hotels.card.perNight}
+          {text.hotels.card.from} {price.toFixed(2)} {currencySymbol}{' '}
+          {text.hotels.card.perNight}
         </p>
 
         <Link to={`/hotels/${hotel.id}`} className={styles.detailsLink}>

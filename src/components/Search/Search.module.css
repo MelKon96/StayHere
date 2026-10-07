@@ -310,7 +310,9 @@
   background: #222;
   transform: translateX(-50%) rotate(45deg);
 }
-
+.clickable {
+  cursor: pointer;
+}
 @media (max-width: 1024px) {
   .search {
     flex-direction: column;
