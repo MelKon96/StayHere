@@ -197,8 +197,4 @@ HTML и CSS проверены средствами валидации:
 
 ---
 
-<div align="center">
 
-Сделано с ❤️ · [melkon96](https://github.com/melkon96)
-
-</div>
