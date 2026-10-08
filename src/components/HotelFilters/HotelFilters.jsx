@@ -25,7 +25,7 @@ const HotelFilters = ({
     minRooms: roomsBounds,
     maxRooms: roomsBounds,
   };
-  console.log('roomsBounds:', roomsBounds);
+
   const getStarsLabel = (count) => {
     if (count === 1) return text.star;
     if (language === 'ru' && count !== 5) return text.starsPlural;
@@ -100,11 +100,14 @@ const HotelFilters = ({
     const bounds = boundsByField[field];
     const isMin = field.startsWith('min');
 
+    const min = Number.isFinite(bounds?.min) ? bounds.min : 0;
+    const max = Number.isFinite(bounds?.max) ? bounds.max : undefined;
+
     return {
       type: 'number',
-      min: bounds?.min ?? 0,
-      max: bounds?.max,
-      placeholder: bounds ? String(isMin ? bounds.min : bounds.max) : '',
+      min,
+      max,
+      placeholder: bounds ? String(isMin ? min : (max ?? '')) : '',
       value: filters[field],
       onChange: (e) => handleChange(field, e.target.value),
       onBlur: () => handleRangeBlur(field),

@@ -1,15 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
-
-const savedCurrency = localStorage.getItem("stayhere_currency");
-const savedLanguage = localStorage.getItem("stayhere_language");
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  language: savedLanguage === "en" ? "en" : "ru",
-  currency: savedCurrency === "USD" ? "USD" : "EUR",
+  language: 'ru',
+  currency: 'EUR',
 };
 
 const settingsSlice = createSlice({
-  name: "settings",
+  name: 'settings',
   initialState,
   reducers: {
     setLanguage: (state, action) => {

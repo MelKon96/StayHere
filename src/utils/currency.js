@@ -1,12 +1,13 @@
-const exchangeRates = {
-  EUR: 1,
-  USD: 1.17,
-};
+import { CURRENCIES } from '../constants/currencies.js';
 
 export const convertPrice = (price, currency) => {
-  return price * exchangeRates[currency];
+  const currencyData = CURRENCIES.find((item) => item.code === currency);
+
+  return price * currencyData.rate;
 };
 
 export const getCurrencySymbol = (currency) => {
-  return currency === 'USD' ? '$' : '€';
+  const currencyData = CURRENCIES.find((item) => item.code === currency);
+
+  return currencyData.symbol;
 };

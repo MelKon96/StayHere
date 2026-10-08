@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   current: {
@@ -13,7 +13,7 @@ const initialState = {
 };
 
 const bookingSlice = createSlice({
-  name: "booking",
+  name: 'booking',
   initialState,
   reducers: {
     setBooking: (state, action) => {
@@ -44,6 +44,12 @@ const bookingSlice = createSlice({
       });
     },
 
+    removeBooking: (state, action) => {
+      state.bookings = state.bookings.filter(
+        (booking) => booking.id !== action.payload,
+      );
+    },
+
     clearBooking: (state) => {
       state.current = {
         hotel: null,
@@ -57,6 +63,14 @@ const bookingSlice = createSlice({
   },
 });
 
-export const { setBooking, setBookingCheckIn, setBookingCheckOut, setRooms, addBooking, clearBooking } = bookingSlice.actions;
+export const {
+  setBooking,
+  setBookingCheckIn,
+  setBookingCheckOut,
+  setRooms,
+  addBooking,
+  removeBooking,
+  clearBooking,
+} = bookingSlice.actions;
 
 export default bookingSlice.reducer;

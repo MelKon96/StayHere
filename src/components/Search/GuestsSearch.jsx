@@ -59,7 +59,11 @@ export default function GuestsSearch({ active, onOpen }) {
 
             <span>{guests}</span>
 
-            <button type="button" onClick={increaseGuests}>
+            <button
+              type="button"
+              onClick={increaseGuests}
+              disabled={guests === 9}
+            >
               +
             </button>
           </div>

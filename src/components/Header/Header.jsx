@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { CURRENCIES } from '../../constants/currencies';
+import { LANGUAGES } from '../../constants/languages';
 import { translations } from '../../constants/translations';
 import {
   setCurrency,
@@ -31,16 +33,6 @@ const Header = () => {
     setIsMenuOpen((prev) => !prev);
   };
 
-  const handleSettingChange = (type, value) => {
-    if (type === 'language') {
-      dispatch(setLanguage(value));
-      localStorage.setItem('stayhere_language', value);
-    } else {
-      dispatch(setCurrency(value));
-      localStorage.setItem('stayhere_currency', value);
-    }
-  };
-
   return (
     <header className={styles.header}>
       <Container>
@@ -57,43 +49,35 @@ const Header = () => {
 
           <div className={styles.actions}>
             <div className={styles.languages}>
-              <button
-                type="button"
-                className={`${styles.flagButton} ${language === 'ru' ? styles.active : ''}`}
-                onClick={() => handleSettingChange('language', 'ru')}
-                aria-label="Русский"
-                title="Русский"
-              >
-                🇷🇺
-              </button>
-
-              <button
-                type="button"
-                className={`${styles.flagButton} ${language === 'en' ? styles.active : ''}`}
-                onClick={() => handleSettingChange('language', 'en')}
-                aria-label="English"
-                title="English"
-              >
-                en
-              </button>
+              {LANGUAGES.map((item) => (
+                <button
+                  key={item.code}
+                  type="button"
+                  className={`${styles.flagButton} ${
+                    language === item.code ? styles.active : ''
+                  }`}
+                  onClick={() => dispatch(setLanguage(item.code))}
+                  aria-label={item.name}
+                  title={item.name}
+                >
+                  {item.flag}
+                </button>
+              ))}
             </div>
 
             <div className={styles.currencies}>
-              <button
-                type="button"
-                className={`${styles.currencyButton} ${currency === 'EUR' ? styles.active : ''}`}
-                onClick={() => handleSettingChange('currency', 'EUR')}
-              >
-                EUR
-              </button>
-
-              <button
-                type="button"
-                className={`${styles.currencyButton} ${currency === 'USD' ? styles.active : ''}`}
-                onClick={() => handleSettingChange('currency', 'USD')}
-              >
-                USD
-              </button>
+              {CURRENCIES.map((item) => (
+                <button
+                  key={item.code}
+                  type="button"
+                  className={`${styles.currencyButton} ${
+                    currency === item.code ? styles.active : ''
+                  }`}
+                  onClick={() => dispatch(setCurrency(item.code))}
+                >
+                  {item.code}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -125,29 +109,37 @@ const Header = () => {
               </Link>
 
               <div className={styles.mobileSettings}>
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleSettingChange(
-                      'language',
-                      language === 'ru' ? 'en' : 'ru',
-                    )
-                  }
-                >
-                  {language === 'ru' ? 'Русский' : 'English'}
-                </button>
+                <div className={styles.languages}>
+                  {LANGUAGES.map((item) => (
+                    <button
+                      key={item.code}
+                      type="button"
+                      className={language === item.code ? styles.active : ''}
+                      onClick={() => {
+                        dispatch(setLanguage(item.code));
+                        closeMenu();
+                      }}
+                    >
+                      {item.flag} {item.name}
+                    </button>
+                  ))}
+                </div>
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleSettingChange(
-                      'currency',
-                      currency === 'EUR' ? 'USD' : 'EUR',
-                    )
-                  }
-                >
-                  {currency === 'EUR' ? 'EUR €' : 'USD $'}
-                </button>
+                <div className={styles.currencies}>
+                  {CURRENCIES.map((item) => (
+                    <button
+                      key={item.code}
+                      type="button"
+                      className={currency === item.code ? styles.active : ''}
+                      onClick={() => {
+                        dispatch(setCurrency(item.code));
+                        closeMenu();
+                      }}
+                    >
+                      {item.code} {item.symbol}
+                    </button>
+                  ))}
+                </div>
               </div>
             </nav>
           )}

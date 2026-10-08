@@ -1,6 +1,7 @@
 ul {
   list-style-type: none;
 }
+
 .myBookings {
   padding: 32px 0 48px;
 }
@@ -95,6 +96,37 @@ ul {
   font-weight: 600;
 }
 
+.removeButton {
+  margin-top: 20px;
+  padding: 9px 16px;
+
+  border: 1px solid #e0a0a0;
+  border-radius: 8px;
+
+  background-color: #ffffff;
+  color: #c0392b;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.removeButton:hover {
+  border-color: #c0392b;
+
+  background-color: #fff1f0;
+}
+
+.removeButton:active {
+  background-color: #ffe4e1;
+}
+
 @media (max-width: 768px) {
   .myBookings {
     padding: 24px 0 40px;
@@ -130,5 +162,9 @@ ul {
 @media (max-width: 480px) {
   .bookingDetails {
     grid-template-columns: 1fr;
+  }
+
+  .removeButton {
+    width: 100%;
   }
 }

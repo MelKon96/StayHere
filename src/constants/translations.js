@@ -129,6 +129,7 @@ export const translations = {
       checkOut: 'Выезд',
       guests: 'Гости',
       rooms: 'Номеров',
+      remove: 'Удалить',
     },
     footer: {
       russian: 'Русский',
@@ -265,6 +266,7 @@ export const translations = {
       checkOut: 'Check-out',
       guests: 'Guests',
       rooms: 'Rooms',
+      remove: 'Remove',
     },
     footer: {
       russian: 'Русский',
