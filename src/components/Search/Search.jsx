@@ -114,9 +114,13 @@ export default function Search() {
         onClose={close}
       />
 
-      <DateSearch active={activeItem === 'date'} onOpen={openDate} />
+      <DateSearch
+        active={activeItem === 'date'}
+        onOpen={openDate}
+        onClose={close}
+      />
 
-      <GuestsSearch active={activeItem === 'guests'} onOpen={openGuests} />
+      <GuestsSearch active={activeItem === 'guests'} />
 
       {showHint && (
         <div
