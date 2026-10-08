@@ -1,6 +1,6 @@
 import { useEffect, useEffectEvent } from 'react';
 import { useSelector } from 'react-redux';
-
+import { getCurrencySymbol } from '../../utils/currency';
 import { translations } from '../../constants/translations';
 
 import styles from './HotelFilters.module.css';
@@ -120,7 +120,7 @@ const HotelFilters = ({
 
       <div className={styles.group}>
         <h3>
-          {text.pricePerNight} {currency === 'USD' ? '$' : '€'}
+          {text.pricePerNight} {getCurrencySymbol(currency)}
         </h3>
 
         <div className={styles.priceInputs}>

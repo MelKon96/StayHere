@@ -2,9 +2,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { translations } from '../../constants/translations';
-import { setBooking } from '../../features/booking/bookingSlice';
+import { setBooking } from '../../helpers/store/slices/booking/bookingSlice';
 import { useGetHotelsQuery } from '../../services/hotelApi';
-import { convertPrice, getCurrencySymbol } from '../../utils/currency';
+import { convertPriceWithSymbol } from '../../utils/currency';
 
 import styles from './HotelDetails.module.css';
 
@@ -37,8 +37,6 @@ const HotelDetails = () => {
     return <p>{text.hotels.details.notFound}</p>;
   }
 
-  const currencySymbol = getCurrencySymbol(currency);
-
   return (
     <main className={styles.page}>
       <div className={styles.container}>
@@ -49,6 +47,9 @@ const HotelDetails = () => {
             <div>
               <h1 className={styles.title}>{hotel.name}</h1>
               <p className={styles.location}>{hotel.location}</p>
+              <p className={styles.description}>
+                {text.hotels.descriptions[hotel.id] || hotel.description}
+              </p>
             </div>
 
             <span className={styles.category}>★ {hotel.category}</span>
@@ -59,10 +60,13 @@ const HotelDetails = () => {
 
             <div className={styles.amenitiesList}>
               {hotel.amenities.wifi && <span>Wi-Fi</span>}
+
               {hotel.amenities.airConditioning && (
                 <span>{text.hotels.filters.airConditioning}</span>
               )}
+
               {hotel.amenities.pool && <span>{text.hotels.filters.pool}</span>}
+
               {hotel.amenities.parking && (
                 <span>{text.hotels.filters.parking}</span>
               )}
@@ -74,7 +78,10 @@ const HotelDetails = () => {
 
             <div className={styles.roomsList}>
               {hotel.roomTypes.map((room) => {
-                const price = convertPrice(room.pricePerNight, currency);
+                const price = convertPriceWithSymbol(
+                  room.pricePerNight,
+                  currency,
+                );
 
                 return (
                   <article key={room.type} className={styles.room}>
@@ -91,8 +98,7 @@ const HotelDetails = () => {
 
                     <div className={styles.roomInfo}>
                       <span className={styles.price}>
-                        {price.toFixed(2)} {currencySymbol}{' '}
-                        {text.hotels.details.perNight}
+                        {price} {text.hotels.details.perNight}
                       </span>
 
                       <span className={styles.quantity}>

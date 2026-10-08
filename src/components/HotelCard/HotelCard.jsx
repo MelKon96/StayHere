@@ -6,7 +6,7 @@ import { convertPrice, getCurrencySymbol } from '../../utils/currency';
 
 import styles from './HotelCard.module.css';
 
-const HotelCard = ({ hotel, loading = false }) => {
+const HotelCard = ({ hotel = [], loading = false }) => {
   const currency = useSelector((state) => state.settings.currency);
   const language = useSelector((state) => state.settings.language);
 
@@ -34,7 +34,7 @@ const HotelCard = ({ hotel, loading = false }) => {
     );
   }
 
-  const cheapestRoom = hotel.roomTypes.reduce((cheapest, room) =>
+  const cheapestRoom = hotel?.roomTypes.reduce((cheapest, room) =>
     room.pricePerNight < cheapest.pricePerNight ? room : cheapest,
   );
 

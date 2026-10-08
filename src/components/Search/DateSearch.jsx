@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setCheckIn, setCheckOut } from '../../features/search/searchSlice';
+import {
+  setCheckIn,
+  setCheckOut,
+} from '../../helpers/store/slices/search/searchSlice';
 import { translations } from '../../constants/translations';
 import {
   toISO,

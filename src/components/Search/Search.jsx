@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useFilteredHotels } from '../../hooks/useFilteredHotels';
+
 import { translations } from '../../constants/translations';
+import { useFilteredHotels } from '../../hooks/useFilteredHotels';
 
 import LocationSearch from './LocationSearch';
 import DateSearch from './DateSearch';
@@ -17,7 +18,9 @@ export default function Search() {
   const location = useLocation();
 
   const language = useSelector((state) => state.settings.language);
-  const text = translations[language].search;
+  const city = useSelector((state) => state.search.city);
+  const guests = useSelector((state) => state.search.guests);
+  const hotelFilters = useSelector((state) => state.hotelFilters);
 
   const { hotels, isLoading } = useFilteredHotels();
 
@@ -25,11 +28,51 @@ export default function Search() {
   const [hintVisible, setHintVisible] = useState(false);
 
   const searchRef = useRef(null);
-  const city = useSelector((state) => state.search.city);
-  const guests = useSelector((state) => state.search.guests);
-  const hotelFilters = useSelector((state) => state.hotelFilters);
-
   const prevFilters = useRef({ city, guests, hotelFilters });
+
+  const text = useMemo(() => translations[language].search, [language]);
+
+  const isHotelsPage = useMemo(
+    () => location.pathname === '/hotels',
+    [location.pathname],
+  );
+
+  const showHint = useMemo(
+    () => hintVisible && !isLoading && activeItem === null,
+    [hintVisible, isLoading, activeItem],
+  );
+
+  const close = useCallback(() => {
+    setActiveItem(null);
+  }, []);
+
+  const openLocation = useCallback(() => {
+    setActiveItem('location');
+  }, []);
+
+  const openDate = useCallback(() => {
+    setActiveItem('date');
+  }, []);
+
+  const openGuests = useCallback(() => {
+    setActiveItem('guests');
+  }, []);
+
+  const goToHotels = useCallback(() => {
+    navigate('/hotels');
+  }, [navigate]);
+
+  const handleClickOutside = useCallback((event) => {
+    if (!searchRef.current?.contains(event.target)) {
+      setActiveItem(null);
+    }
+  }, []);
+
+  const handleEscape = useCallback((event) => {
+    if (event.key === 'Escape') {
+      setActiveItem(null);
+    }
+  }, []);
 
   useEffect(() => {
     const prev = prevFilters.current;
@@ -45,20 +88,15 @@ export default function Search() {
     prevFilters.current = { city, guests, hotelFilters };
 
     setHintVisible(true);
-    const id = setTimeout(() => setHintVisible(false), HINT_DURATION);
+
+    const id = setTimeout(() => {
+      setHintVisible(false);
+    }, HINT_DURATION);
 
     return () => clearTimeout(id);
   }, [city, guests, hotelFilters]);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!searchRef.current?.contains(event.target)) setActiveItem(null);
-    };
-
-    const handleEscape = (event) => {
-      if (event.key === 'Escape') setActiveItem(null);
-    };
-
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleEscape);
 
@@ -66,52 +104,26 @@ export default function Search() {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscape);
     };
-  }, []);
-
-  useEffect(() => {
-    const prev = prevFilters.current;
-
-    if (prev.city === city && prev.hotelFilters === hotelFilters) return;
-
-    prevFilters.current = { city, hotelFilters };
-
-    setHintVisible(true);
-    const id = setTimeout(() => setHintVisible(false), HINT_DURATION);
-
-    return () => clearTimeout(id);
-  }, [city, hotelFilters]);
-
-  const close = () => setActiveItem(null);
-
-  const showHint = hintVisible && !isLoading && activeItem === null;
-  const isHotelsPage = location.pathname === '/hotels';
+  }, [handleClickOutside, handleEscape]);
 
   return (
     <div ref={searchRef} className={styles.search}>
       <LocationSearch
         active={activeItem === 'location'}
-        onOpen={() => setActiveItem('location')}
+        onOpen={openLocation}
         onClose={close}
       />
 
-      <DateSearch
-        active={activeItem === 'date'}
-        onOpen={() => setActiveItem('date')}
-      />
+      <DateSearch active={activeItem === 'date'} onOpen={openDate} />
 
-      <GuestsSearch
-        active={activeItem === 'guests'}
-        onOpen={() => setActiveItem('guests')}
-      />
+      <GuestsSearch active={activeItem === 'guests'} onOpen={openGuests} />
 
       {showHint && (
         <div
           className={`${styles.resultsHint} ${
             !isHotelsPage ? styles.clickable : ''
           }`}
-          {...(!isHotelsPage && {
-            onClick: () => navigate('/hotels'),
-          })}
+          onClick={!isHotelsPage ? goToHotels : undefined}
           role="status"
           aria-live="polite"
         >

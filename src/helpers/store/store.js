@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 
-import { hotelApi } from '../services/hotelApi.js';
+import { hotelApi } from '../../services/hotelApi.js';
 
-import searchReducer from '../features/search/searchSlice.js';
-import bookingReducer from '../features/booking/bookingSlice.js';
-import settingsReducer from '../features/settings/settingsSlice.js';
-import hotelFiltersReducer from '../features/hotelFilters/hotelFiltersSlice.js';
+import searchReducer from './slices/search/searchSlice.js';
+import bookingReducer from './slices/booking/bookingSlice.js';
+import settingsReducer from './slices/settings/settingsSlice.js';
+import hotelFiltersReducer from './slices/hotelFilters/hotelFiltersSlice.js';
 
 const storage = {
   getItem: (key) => Promise.resolve(localStorage.getItem(key)),

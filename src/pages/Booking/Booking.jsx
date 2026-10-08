@@ -7,31 +7,26 @@ import {
   setRooms,
   addBooking,
   clearBooking,
-} from '../../features/booking/bookingSlice';
+} from '../../helpers/store/slices/booking/bookingSlice';
 import { translations } from '../../constants/translations';
-import { convertPrice, getCurrencySymbol } from '../../utils/currency';
+import { convertPriceWithSymbol } from '../../utils/currency';
 import { calculateNights, addDays, getTodayISO } from '../../utils/date';
 
 import styles from './Booking.module.css';
 
 const Booking = () => {
   const dispatch = useDispatch();
-
   const booking = useSelector((state) => state.booking.current);
   const currency = useSelector((state) => state.settings.currency);
   const language = useSelector((state) => state.settings.language);
-
   const text = translations[language];
-
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [confirmedBooking, setConfirmedBooking] = useState(null);
 
   const handleConfirm = () => {
     setConfirmedBooking(booking);
-
     dispatch(addBooking());
     dispatch(clearBooking());
-
     setIsConfirmed(true);
   };
 
@@ -60,17 +55,14 @@ const Booking = () => {
       confirmedBooking.rooms
     : 0;
 
-  const displayedTotalPrice = convertPrice(totalPrice, currency);
+  const displayedTotalPrice = convertPriceWithSymbol(totalPrice, currency);
 
-  const displayedConfirmedTotalPrice = convertPrice(
+  const displayedConfirmedTotalPrice = convertPriceWithSymbol(
     confirmedTotalPrice,
     currency,
   );
 
-  const currencySymbol = getCurrencySymbol(currency);
-
   const todayISO = getTodayISO();
-
   const minCheckOutDate = booking.checkIn ? addDays(booking.checkIn, 1) : '';
 
   return (
@@ -121,9 +113,7 @@ const Booking = () => {
             <div className={styles.confirmationTotal}>
               <span>{text.booking.total}</span>
 
-              <strong>
-                {displayedConfirmedTotalPrice.toFixed(2)} {currencySymbol}
-              </strong>
+              <strong>{displayedConfirmedTotalPrice}</strong>
             </div>
           </section>
         )}
@@ -215,9 +205,7 @@ const Booking = () => {
               <div>
                 <span>{text.booking.price}</span>
 
-                <strong>
-                  {displayedTotalPrice.toFixed(2)} {currencySymbol}
-                </strong>
+                <strong>{displayedTotalPrice}</strong>
               </div>
 
               <button

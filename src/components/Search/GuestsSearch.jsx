@@ -1,11 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setGuests } from '../../features/search/searchSlice';
+import { setGuests } from '../../helpers/store/slices/search/searchSlice';
 import { translations } from '../../constants/translations';
 
 import styles from './Search.module.css';
 
-export default function GuestsSearch({ active, onOpen }) {
+const MIN_GUESTS = 1;
+const MAX_GUESTS = 9;
+
+export default function GuestsSearch({ onOpen }) {
   const dispatch = useDispatch();
 
   const guests = useSelector((state) => state.search.guests);
@@ -13,62 +16,38 @@ export default function GuestsSearch({ active, onOpen }) {
 
   const text = translations[language];
 
-  const decreaseGuests = () => {
-    dispatch(setGuests(guests - 1));
-  };
-
-  const increaseGuests = () => {
-    dispatch(setGuests(guests + 1));
-  };
-
   const guestLabel =
-    language === 'ru'
-      ? guests === 1
-        ? text.search.guest
-        : text.search.guestsPlural
-      : guests === 1
-        ? text.search.guest
-        : text.search.guestsPlural;
+    guests === 1 ? text.search.guest : text.search.guestsPlural;
 
   return (
-    <div
-      className={`${styles.item} ${active ? styles.active : ''}`}
-      onClick={onOpen}
-    >
+    <div className={`${styles.item} ${styles.guestsItem}`} onClick={onOpen}>
       <span className={styles.label}>{text.search.who}</span>
 
-      <span className={styles.searchValue}>
-        {guests} {guestLabel}
-      </span>
-
-      {active && (
-        <div
-          className={styles.guestsPicker}
-          onClick={(event) => event.stopPropagation()}
+      <div className={styles.guestsStepper}>
+        <button
+          type="button"
+          className={styles.stepperButton}
+          onClick={() => dispatch(setGuests(guests - 1))}
+          disabled={guests <= MIN_GUESTS}
+          aria-label={text.search.decreaseGuests}
         >
-          <span>{text.search.guests}</span>
+          −
+        </button>
 
-          <div className={styles.guestsControls}>
-            <button
-              type="button"
-              onClick={decreaseGuests}
-              disabled={guests === 1}
-            >
-              −
-            </button>
+        <span className={styles.guestsValue} aria-live="polite">
+          {guests} {guestLabel}
+        </span>
 
-            <span>{guests}</span>
-
-            <button
-              type="button"
-              onClick={increaseGuests}
-              disabled={guests === 9}
-            >
-              +
-            </button>
-          </div>
-        </div>
-      )}
+        <button
+          type="button"
+          className={styles.stepperButton}
+          onClick={() => dispatch(setGuests(guests + 1))}
+          disabled={guests >= MAX_GUESTS}
+          aria-label={text.search.increaseGuests}
+        >
+          +
+        </button>
+      </div>
     </div>
   );
 }

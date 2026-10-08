@@ -11,3 +11,10 @@ export const getCurrencySymbol = (currency) => {
 
   return currencyData.symbol;
 };
+
+export const convertPriceWithSymbol = (price, currency) => {
+  const convertedPrice = convertPrice(price, currency);
+  const symbol = getCurrencySymbol(currency);
+
+  return `${convertedPrice.toFixed(2)} ${symbol}`;
+};

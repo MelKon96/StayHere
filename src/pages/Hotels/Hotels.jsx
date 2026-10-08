@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import HotelCard from '../../components/HotelCard/HotelCard';
 import HotelFilters from '../../components/HotelFilters/HotelFilters';
-import { setHotelFilters } from '../../features/hotelFilters/hotelFiltersSlice';
+import { setHotelFilters } from '../../helpers/store/slices/hotelFilters/hotelFiltersSlice';
 import { useFilteredHotels } from '../../hooks/useFilteredHotels';
 import { translations } from '../../constants/translations';
 

@@ -6,6 +6,9 @@ export const translations = {
       bookings: 'Мои бронирования',
       openMenu: 'Открыть меню',
       closeMenu: 'Закрыть меню',
+      selectLanguage: 'Выберите язык',
+      selectCurrency: 'Выберите валюту',
+      close: 'Закрыть',
     },
     search: {
       find: 'Найти',
@@ -23,6 +26,8 @@ export const translations = {
       updating: 'Обновляем результаты…',
       found: 'Найдено отелей',
       clear: 'Сброс',
+      decreaseGuests: 'Уменьшить количество гостей',
+      increaseGuests: 'Увеличить количество гостей',
     },
     home: {
       subtitle: 'Путешествуйте с комфортом',
@@ -88,6 +93,14 @@ export const translations = {
         pool: 'Бассейн',
         parking: 'Парковка',
       },
+      descriptions: {
+        1: 'Роскошный отель в центре Берлина с бассейном, парковкой и современными номерами.',
+        2: 'Современные апартаменты недалеко от центра Амстердама.',
+        3: 'Большой пятизвёздочный отель с бассейном, парковкой и полным набором удобств.',
+        4: 'Небольшой отель в центральной части Праги с парковкой и бесплатным Wi-Fi.',
+        5: 'Курортный отель рядом с побережьем с бассейном и современными номерами.',
+        6: 'Бюджетный вариант для коротких поездок в Берлин.',
+      },
       card: {
         from: 'от',
         perNight: '/ ночь',
@@ -135,6 +148,11 @@ export const translations = {
       russian: 'Русский',
       english: 'English',
     },
+    notFound: {
+      title: 'Мы не смогли найти страницу',
+      message: 'Но мы обязательно найдём вам кое-что получше.',
+      link: 'Найти себе место для незабываемого отдыха',
+    },
   },
 
   en: {
@@ -144,6 +162,9 @@ export const translations = {
       bookings: 'My bookings',
       openMenu: 'Open menu',
       closeMenu: 'Close menu',
+      selectLanguage: 'Select your language',
+      selectCurrency: 'Select your currency',
+      close: 'Close',
     },
     search: {
       find: 'Search',
@@ -160,6 +181,8 @@ export const translations = {
       guestsPlural: 'guests',
       updating: 'Update results…',
       found: 'Hotels found',
+      decreaseGuests: 'Decrease guests',
+      increaseGuests: 'Increase guests',
     },
     home: {
       subtitle: 'Travel in comfort',
@@ -225,6 +248,14 @@ export const translations = {
         pool: 'Pool',
         parking: 'Parking',
       },
+      descriptions: {
+        1: 'A luxury hotel in the center of Berlin with a pool, parking, and modern rooms.',
+        2: 'Modern apartments located near the center of Amsterdam.',
+        3: 'A large five-star hotel with a pool, parking, and a full range of amenities.',
+        4: 'A small hotel in central Prague with parking and free Wi-Fi.',
+        5: 'A resort hotel near the coast with a pool and modern rooms.',
+        6: 'A budget option for short trips to Berlin.',
+      },
       card: {
         from: 'from',
         perNight: '/ night',
@@ -271,6 +302,11 @@ export const translations = {
     footer: {
       russian: 'Русский',
       english: 'English',
+    },
+    notFound: {
+      title: "We couldn't find the page",
+      message: "But we'll definitely find something better for you.",
+      link: 'Find a place for an unforgettable stay',
     },
   },
 };

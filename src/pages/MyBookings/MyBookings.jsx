@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 
-import { removeBooking } from '../../features/booking/bookingSlice';
+import { removeBooking } from '../../helpers/store/slices/booking/bookingSlice';
 import { translations } from '../../constants/translations';
 
 import styles from './MyBookings.module.css';

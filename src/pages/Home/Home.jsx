@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { destinations } from '../../constants/destinations';
 import { translations } from '../../constants/translations';
-import { setCity } from '../../features/search/searchSlice';
+import { setCity } from '../../helpers/store/slices/search/searchSlice';
 
 import styles from './Home.module.css';
 

@@ -1,22 +1,22 @@
-import path from "path";
-import webpack from "webpack";
-import HtmlWebpackPlugin from "html-webpack-plugin";
-import CopyWebpackPlugin from "copy-webpack-plugin";
-import { fileURLToPath } from "url";
+import path from 'path';
+import webpack from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url); // Полный путь
 const __dirname = path.dirname(__filename); //Папка
 
 export default (env, argv) => {
-  const isProduction = argv.mode === "production";
-  const publicPath = isProduction ? "/StayHere/" : "/";
+  const isProduction = argv.mode === 'production';
+  const publicPath = isProduction ? '/StayHere/' : '/';
 
   return {
-    entry: "./src/main.jsx",
+    entry: './src/main.jsx',
 
     output: {
-      path: path.resolve(__dirname, "dist"),
-      filename: "bundle.js",
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'bundle.js',
       clean: true,
       publicPath: publicPath,
     },
@@ -26,14 +26,14 @@ export default (env, argv) => {
         {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
-          use: "babel-loader",
+          use: 'babel-loader',
         },
         {
           test: /\.module\.css$/,
           use: [
-            "style-loader",
+            'style-loader',
             {
-              loader: "css-loader",
+              loader: 'css-loader',
               options: {
                 modules: true,
                 esModule: false,
@@ -44,41 +44,42 @@ export default (env, argv) => {
         {
           test: /\.css$/,
           exclude: /\.module\.css$/,
-          use: ["style-loader", "css-loader"],
+          use: ['style-loader', 'css-loader'],
         },
+        { test: /\.svg$/, type: 'asset/resource' },
       ],
     },
 
     plugins: [
       new HtmlWebpackPlugin({
-        template: "./public/index.html",
-        filename: "index.html",
+        template: './public/index.html',
+        filename: 'index.html',
       }),
 
       new HtmlWebpackPlugin({
-        template: "./public/index.html",
-        filename: "404.html",
+        template: './public/index.html',
+        filename: '404.html',
       }),
 
       new CopyWebpackPlugin({
         patterns: [
           {
-            from: path.resolve(__dirname, "public/img"),
-            to: "img",
+            from: path.resolve(__dirname, 'public/img'),
+            to: 'img',
           },
         ],
       }),
       new webpack.DefinePlugin({
-        "process.env.PUBLIC_URL": JSON.stringify(publicPath),
+        'process.env.PUBLIC_URL': JSON.stringify(publicPath),
       }),
     ],
 
     resolve: {
-      extensions: [".js", ".jsx"],
+      extensions: ['.js', '.jsx'],
     },
 
     devServer: {
-      static: "./dist",
+      static: './dist',
       port: 3000,
       historyApiFallback: {
         index: publicPath,

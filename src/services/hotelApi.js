@@ -1,20 +1,19 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const hotelApi = createApi({
-  reducerPath: "hotelApi",
+  reducerPath: 'hotelApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://dummyjson.com",
+    baseUrl: 'https://dummyjson.com',
   }),
 
   endpoints: (builder) => ({
     getHotels: builder.query({
-      query: () => "/c/c6b7-453b-4dc9-a3aa",
+      query: () => '/c/e5b6-e719-4188-b332',
     }),
     getHotel: builder.query({
-      query: (id) => `/c/c6b7-453b-4dc9-a3aa/${id}`,
+      query: (id) => `/c/e5b6-e719-4188-b332/${id}`,
     }),
   }),
 });
 
 export const { useGetHotelsQuery, useGetHotelQuery } = hotelApi;
-//https://dummyjson.com/c/e5b6-e719-4188-b332

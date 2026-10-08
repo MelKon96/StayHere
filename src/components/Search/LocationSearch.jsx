@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setCity } from '../../features/search/searchSlice';
+import { setCity } from '../../helpers/store/slices/search/searchSlice';
 import { useGetHotelsQuery } from '../../services/hotelApi';
 import { translations } from '../../constants/translations';
 import useDebounce from '../../hooks/useDebounce';
@@ -59,7 +59,10 @@ export default function LocationSearch({ active, onOpen, onClose }) {
           id="destination"
           type="text"
           autoComplete="off"
-          placeholder={text.destinationPlaceholder}
+          placeholder={
+            `${hotels[1]?.location}, ${hotels[2]?.location}...` ||
+            text.destinationPlaceholder
+          }
           value={inputValue}
           className={styles.searchValue}
           onChange={handleInputChange}

@@ -1,22 +1,24 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-
+import FlagIcon from '../FlagIcon/FlagIcon';
 import { CURRENCIES } from '../../constants/currencies';
 import { LANGUAGES } from '../../constants/languages';
 import { translations } from '../../constants/translations';
 import {
   setCurrency,
   setLanguage,
-} from '../../features/settings/settingsSlice';
+} from '../../helpers/store/slices/settings/settingsSlice';
 
 import styles from './Header.module.css';
-
 import Search from '../Search/Search';
 import Container from '../Container/Container';
+import SettingsModal from '../SettingsModal/SettingsModal';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const [activeModal, setActiveModal] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -25,13 +27,56 @@ const Header = () => {
 
   const text = translations[language];
 
-  const closeMenu = () => {
-    setIsMenuOpen(false);
+  const currentLanguage = LANGUAGES.find((item) => item.code === language);
+  const currentCurrency = CURRENCIES.find((item) => item.code === currency);
+
+  const closeMenu = () => setIsMenuOpen(false);
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+
+  const openModal = (type) => {
+    closeMenu();
+    setActiveModal(type);
   };
 
-  const toggleMenu = () => {
-    setIsMenuOpen((prev) => !prev);
-  };
+  const closeModal = () => setActiveModal(null);
+
+  const languageOptions = LANGUAGES.map((item) => ({
+    value: item.code,
+    label: item.name,
+    icon: <FlagIcon src={item.flag} size={28} />,
+  }));
+
+  const currencyOptions = CURRENCIES.map((item) => ({
+    value: item.code,
+    label: item.name ? `${item.name}` : item.code,
+    hint: `${item.code} · ${item.symbol}`,
+  }));
+
+  const settingsButtons = (
+    <>
+      <button
+        type="button"
+        className={styles.settingsButton}
+        onClick={() => openModal('language')}
+        aria-haspopup="dialog"
+        aria-label={`${text.header.selectLanguage}: ${currentLanguage?.name}`}
+        title={text.header.selectLanguage}
+      >
+        <FlagIcon src={currentLanguage?.flag} size={22} />
+      </button>
+
+      <button
+        type="button"
+        className={styles.settingsButton}
+        onClick={() => openModal('currency')}
+        aria-haspopup="dialog"
+        aria-label={`${text.header.selectCurrency}: ${currency}`}
+        title={text.header.selectCurrency}
+      >
+        {currentCurrency?.code} {currentCurrency?.symbol}
+      </button>
+    </>
+  );
 
   return (
     <header className={styles.header}>
@@ -47,39 +92,7 @@ const Header = () => {
             <Link to="/my-bookings">{text.header.bookings}</Link>
           </nav>
 
-          <div className={styles.actions}>
-            <div className={styles.languages}>
-              {LANGUAGES.map((item) => (
-                <button
-                  key={item.code}
-                  type="button"
-                  className={`${styles.flagButton} ${
-                    language === item.code ? styles.active : ''
-                  }`}
-                  onClick={() => dispatch(setLanguage(item.code))}
-                  aria-label={item.name}
-                  title={item.name}
-                >
-                  {item.flag}
-                </button>
-              ))}
-            </div>
-
-            <div className={styles.currencies}>
-              {CURRENCIES.map((item) => (
-                <button
-                  key={item.code}
-                  type="button"
-                  className={`${styles.currencyButton} ${
-                    currency === item.code ? styles.active : ''
-                  }`}
-                  onClick={() => dispatch(setCurrency(item.code))}
-                >
-                  {item.code}
-                </button>
-              ))}
-            </div>
-          </div>
+          <div className={styles.actions}>{settingsButtons}</div>
 
           <button
             type="button"
@@ -108,45 +121,33 @@ const Header = () => {
                 {text.header.bookings}
               </Link>
 
-              <div className={styles.mobileSettings}>
-                <div className={styles.languages}>
-                  {LANGUAGES.map((item) => (
-                    <button
-                      key={item.code}
-                      type="button"
-                      className={language === item.code ? styles.active : ''}
-                      onClick={() => {
-                        dispatch(setLanguage(item.code));
-                        closeMenu();
-                      }}
-                    >
-                      {item.flag} {item.name}
-                    </button>
-                  ))}
-                </div>
-
-                <div className={styles.currencies}>
-                  {CURRENCIES.map((item) => (
-                    <button
-                      key={item.code}
-                      type="button"
-                      className={currency === item.code ? styles.active : ''}
-                      onClick={() => {
-                        dispatch(setCurrency(item.code));
-                        closeMenu();
-                      }}
-                    >
-                      {item.code} {item.symbol}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <div className={styles.mobileSettings}>{settingsButtons}</div>
             </nav>
           )}
         </div>
 
         <Search />
       </Container>
+
+      <SettingsModal
+        isOpen={activeModal === 'language'}
+        title={text.header.selectLanguage}
+        closeLabel={text.header.close}
+        options={languageOptions}
+        selected={language}
+        onSelect={(code) => dispatch(setLanguage(code))}
+        onClose={closeModal}
+      />
+
+      <SettingsModal
+        isOpen={activeModal === 'currency'}
+        title={text.header.selectCurrency}
+        closeLabel={text.header.close}
+        options={currencyOptions}
+        selected={currency}
+        onSelect={(code) => dispatch(setCurrency(code))}
+        onClose={closeModal}
+      />
     </header>
   );
 };

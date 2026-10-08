@@ -2,11 +2,11 @@ export const LANGUAGES = [
   {
     code: 'ru',
     name: 'Русский',
-    flag: '🇷🇺',
+    flag: 'img/ru.svg',
   },
   {
     code: 'en',
     name: 'English',
-    flag: '🇬🇧',
+    flag: 'img/us.svg',
   },
 ];
