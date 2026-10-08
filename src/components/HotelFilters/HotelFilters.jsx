@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+
 import { getCurrencySymbol } from '../../utils/currency';
 import { translations } from '../../constants/translations';
 
@@ -46,24 +47,31 @@ const HotelFilters = ({
     handleChange(field, next);
   };
 
+  const clamp = (field, value) => {
+    const bounds = boundsByField[field];
+    if (!bounds) return value;
+    return Math.min(Math.max(value, bounds.min), bounds.max);
+  };
+
   const handleRangeBlur = (field) => {
     const raw = filters[field];
-    if (raw === '') return;
+    if (raw === '' || !boundsByField[field]) return;
 
     const isMin = field.startsWith('min');
     const counterpart = isMin
       ? field.replace('min', 'max')
       : field.replace('max', 'min');
 
+    let value = clamp(field, Number(raw));
+
     const other = filters[counterpart];
-    if (other === '') return;
-
-    const value = Number(raw);
-    const otherValue = Number(other);
-
-    if (isMin ? value > otherValue : value < otherValue) {
-      handleChange(field, String(otherValue));
+    if (other !== '') {
+      value = isMin
+        ? Math.min(value, Number(other))
+        : Math.max(value, Number(other));
     }
+
+    if (value !== Number(raw)) handleChange(field, String(value));
   };
 
   const getRangeProps = (field) => {
@@ -81,6 +89,9 @@ const HotelFilters = ({
       value: filters[field],
       onChange: (e) => handleChange(field, e.target.value),
       onBlur: () => handleRangeBlur(field),
+      onKeyDown: (e) => {
+        if (e.key === 'Enter') handleRangeBlur(field);
+      },
     };
   };
 
@@ -94,8 +105,8 @@ const HotelFilters = ({
         </h3>
 
         <div className={styles.priceInputs}>
-          <input {...getRangeProps('minPrice')} />
-          <input {...getRangeProps('maxPrice')} />
+          <input {...getRangeProps('minPrice')} step="10" />
+          <input {...getRangeProps('maxPrice')} step="10" />
         </div>
       </div>
 

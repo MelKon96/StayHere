@@ -54,10 +54,6 @@ export default function Search() {
     setActiveItem('date');
   }, []);
 
-  const openGuests = useCallback(() => {
-    setActiveItem('guests');
-  }, []);
-
   const goToHotels = useCallback(() => {
     navigate('/hotels');
   }, [navigate]);
