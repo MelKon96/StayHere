@@ -21,6 +21,14 @@ export default function LocationSearch({ active, onOpen, onClose }) {
   }, [city]);
 
   const { data: hotels = [] } = useGetHotelsQuery();
+  const exampleCities = [
+    ...new Set(hotels.map((hotel) => hotel.location)),
+  ].slice(0, 2);
+
+  const placeholder =
+    exampleCities.length > 0
+      ? `${exampleCities.join(', ')}...`
+      : text.destinationPlaceholder;
 
   const filteredCities = useMemo(() => {
     const query = debouncedValue.trim().toLowerCase();
@@ -59,10 +67,7 @@ export default function LocationSearch({ active, onOpen, onClose }) {
           id="destination"
           type="text"
           autoComplete="off"
-          placeholder={
-            `${hotels[1]?.location}, ${hotels[2]?.location}...` ||
-            text.destinationPlaceholder
-          }
+          placeholder={placeholder}
           value={inputValue}
           className={styles.searchValue}
           onChange={handleInputChange}
