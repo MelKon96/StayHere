@@ -291,7 +291,7 @@
 .guestsStepper {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 .guestsValue {
@@ -306,8 +306,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 28px;
-  height: 28px;
+  width: 18px;
+  height: 18px;
   padding: 0;
   border: 1px solid #cccccc;
   border-radius: 50%;

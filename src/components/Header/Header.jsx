@@ -17,11 +17,8 @@ import SettingsModal from '../SettingsModal/SettingsModal';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const [activeModal, setActiveModal] = useState(null);
-
   const dispatch = useDispatch();
-
   const language = useSelector((state) => state.settings.language);
   const currency = useSelector((state) => state.settings.currency);
 
@@ -37,7 +34,6 @@ const Header = () => {
     closeMenu();
     setActiveModal(type);
   };
-
   const closeModal = () => setActiveModal(null);
 
   const languageOptions = LANGUAGES.map((item) => ({
@@ -112,20 +108,16 @@ const Header = () => {
               <Link to="/" onClick={closeMenu}>
                 {text.header.home}
               </Link>
-
               <Link to="/hotels" onClick={closeMenu}>
                 {text.header.hotels}
               </Link>
-
               <Link to="/my-bookings" onClick={closeMenu}>
                 {text.header.bookings}
               </Link>
-
               <div className={styles.mobileSettings}>{settingsButtons}</div>
             </nav>
           )}
         </div>
-
         <Search />
       </Container>
 

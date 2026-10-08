@@ -1,4 +1,3 @@
-import { useEffect, useEffectEvent } from 'react';
 import { useSelector } from 'react-redux';
 import { getCurrencySymbol } from '../../utils/currency';
 import { translations } from '../../constants/translations';
@@ -47,53 +46,24 @@ const HotelFilters = ({
     handleChange(field, next);
   };
 
-  const clamp = (field, value) => {
-    const bounds = boundsByField[field];
-    if (!bounds) return value;
-    return Math.min(Math.max(value, bounds.min), bounds.max);
-  };
-
-  const clampFiltersToBounds = useEffectEvent(() => {
-    const next = { ...filters };
-    let changed = false;
-
-    Object.keys(boundsByField).forEach((field) => {
-      if (!boundsByField[field] || filters[field] === '') return;
-
-      const current = Number(filters[field]);
-      const clamped = clamp(field, current);
-
-      if (clamped !== current) {
-        next[field] = String(clamped);
-        changed = true;
-      }
-    });
-
-    if (changed) onFiltersChange(next);
-  });
-
-  useEffect(() => {
-    clampFiltersToBounds();
-  }, [priceBounds?.min, priceBounds?.max, roomsBounds?.min, roomsBounds?.max]);
-
   const handleRangeBlur = (field) => {
     const raw = filters[field];
-    if (raw === '' || !boundsByField[field]) return;
+    if (raw === '') return;
 
     const isMin = field.startsWith('min');
     const counterpart = isMin
       ? field.replace('min', 'max')
       : field.replace('max', 'min');
 
-    let value = clamp(field, Number(raw));
+    const other = filters[counterpart];
+    if (other === '') return;
 
-    if (filters[counterpart] !== '') {
-      value = isMin
-        ? Math.min(value, Number(filters[counterpart]))
-        : Math.max(value, Number(filters[counterpart]));
+    const value = Number(raw);
+    const otherValue = Number(other);
+
+    if (isMin ? value > otherValue : value < otherValue) {
+      handleChange(field, String(otherValue));
     }
-
-    if (value !== Number(raw)) handleChange(field, String(value));
   };
 
   const getRangeProps = (field) => {
@@ -124,8 +94,8 @@ const HotelFilters = ({
         </h3>
 
         <div className={styles.priceInputs}>
-          <input {...getRangeProps('minPrice')} step="10" />
-          <input {...getRangeProps('maxPrice')} step="10" />
+          <input {...getRangeProps('minPrice')} />
+          <input {...getRangeProps('maxPrice')} />
         </div>
       </div>
 
