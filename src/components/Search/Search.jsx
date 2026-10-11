@@ -38,8 +38,8 @@ export default function Search() {
   );
 
   const showHint = useMemo(
-    () => hintVisible && !isLoading && activeItem === null,
-    [hintVisible, isLoading, activeItem],
+    () => hintVisible && !isLoading && activeItem === null && !isHotelsPage,
+    [hintVisible, isLoading, activeItem, isHotelsPage],
   );
 
   const close = useCallback(() => {
@@ -93,6 +93,10 @@ export default function Search() {
   }, [city, guests, hotelFilters]);
 
   useEffect(() => {
+    if (isHotelsPage) setHintVisible(false);
+  }, [isHotelsPage]);
+
+  useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleEscape);
 
@@ -120,10 +124,8 @@ export default function Search() {
 
       {showHint && (
         <div
-          className={`${styles.resultsHint} ${
-            !isHotelsPage ? styles.clickable : ''
-          }`}
-          onClick={!isHotelsPage ? goToHotels : undefined}
+          className={`${styles.resultsHint} ${styles.clickable}`}
+          onClick={goToHotels}
           role="status"
           aria-live="polite"
         >
