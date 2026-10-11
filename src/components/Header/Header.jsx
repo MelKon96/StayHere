@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import FlagIcon from '../FlagIcon/FlagIcon';
+
 import { CURRENCIES } from '../../constants/currencies';
 import { LANGUAGES } from '../../constants/languages';
 import { translations } from '../../constants/translations';
@@ -10,10 +10,15 @@ import {
   setLanguage,
 } from '../../helpers/store/slices/settings/settingsSlice';
 
-import styles from './Header.module.css';
 import Search from '../Search/Search';
 import Container from '../Container/Container';
 import SettingsModal from '../SettingsModal/SettingsModal';
+
+import styles from './Header.module.css';
+
+const FlagIcon = ({ src, size }) => (
+  <img src={src} alt="" width={size} height={size} className={styles.flag} />
+);
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
