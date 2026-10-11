@@ -12,6 +12,10 @@ const getBounds = (values) =>
         max: Math.ceil(Math.max(...values)),
       };
 
+
+const getTotalCapacity = (hotel) =>
+  hotel.roomTypes.reduce((sum, room) => sum + room.capacity * room.quantity, 0);
+
 export function useFilteredHotels() {
   const { data: hotels = [], isLoading, error } = useGetHotelsQuery();
 
@@ -21,64 +25,61 @@ export function useFilteredHotels() {
   const filters = useSelector((state) => state.hotelFilters);
 
   const { filteredHotels, priceBounds, roomsBounds } = useMemo(() => {
-    const min = filters.minPrice !== '' ? Number(filters.minPrice) : -Infinity;
-    const max = filters.maxPrice !== '' ? Number(filters.maxPrice) : Infinity;
+    const minPrice =
+      filters.minPrice !== '' ? Number(filters.minPrice) : -Infinity;
+    const maxPrice =
+      filters.maxPrice !== '' ? Number(filters.maxPrice) : Infinity;
 
-    // skip: 'price' | 'rooms' | null — какой фильтр пропустить
-    const applyFilters = (skip) =>
-      hotels.filter((hotel) => {
-        if (city && hotel.location !== city) return false;
+    const baseHotels = hotels.filter((hotel) => {
+      if (city && hotel.location !== city) return false;
+      if (getTotalCapacity(hotel) < guests) return false;
 
-        if (!hotel.roomTypes.some((room) => room.capacity >= guests)) {
-          return false;
-        }
+      if (
+        filters.categories.length > 0 &&
+        !filters.categories.includes(hotel.category)
+      ) {
+        return false;
+      }
 
-        if (
-          filters.categories.length > 0 &&
-          !filters.categories.includes(hotel.category)
-        ) {
-          return false;
-        }
+      if (
+        filters.amenities.length > 0 &&
+        !filters.amenities.every((amenity) => hotel.amenities[amenity])
+      ) {
+        return false;
+      }
 
-        if (
-          filters.amenities.length > 0 &&
-          !filters.amenities.every((amenity) => hotel.amenities[amenity])
-        ) {
-          return false;
-        }
+      return true;
+    });
 
-        if (skip !== 'rooms') {
-          if (filters.minRooms !== '' && hotel.rooms < Number(filters.minRooms))
-            return false;
-          if (filters.maxRooms !== '' && hotel.rooms > Number(filters.maxRooms))
-            return false;
-        }
 
-        if (skip !== 'price') {
-          const hasRoomInRange = hotel.roomTypes.some((room) => {
-            if (room.capacity < guests) return false;
-            const price = convertPrice(room.pricePerNight, currency);
-            return price >= min && price <= max;
-          });
-          if (!hasRoomInRange) return false;
-        }
+    const hotelsInSizeRange = baseHotels.filter((hotel) => {
+      if (filters.minRooms !== '' && hotel.rooms < Number(filters.minRooms))
+        return false;
+      if (filters.maxRooms !== '' && hotel.rooms > Number(filters.maxRooms))
+        return false;
 
-        return true;
-      });
+      return true;
+    });
 
-    const forPriceBounds = applyFilters('price');
-    const forRoomsBounds = applyFilters('rooms');
+    const filtered = hotelsInSizeRange.filter((hotel) =>
+      hotel.roomTypes.some((room) => {
+        const price = convertPrice(room.pricePerNight, currency);
+        return price >= minPrice && price <= maxPrice;
+      }),
+    );
 
     return {
-      filteredHotels: applyFilters(null),
+      filteredHotels: filtered,
+
       priceBounds: getBounds(
-        forPriceBounds.flatMap((hotel) =>
-          hotel.roomTypes
-            .filter((room) => room.capacity >= guests)
-            .map((room) => convertPrice(room.pricePerNight, currency)),
+        hotelsInSizeRange.flatMap((hotel) =>
+          hotel.roomTypes.map((room) =>
+            convertPrice(room.pricePerNight, currency),
+          ),
         ),
       ),
-      roomsBounds: getBounds(forRoomsBounds.map((hotel) => hotel.rooms)),
+
+      roomsBounds: getBounds(baseHotels.map((hotel) => hotel.rooms)),
     };
   }, [hotels, city, guests, currency, filters]);
 

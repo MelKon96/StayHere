@@ -1,3 +1,4 @@
+import { useEffect, useEffectEvent, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
 import { getCurrencySymbol } from '../../utils/currency';
@@ -25,6 +26,18 @@ const HotelFilters = ({
     minRooms: roomsBounds,
     maxRooms: roomsBounds,
   };
+
+  const prevCurrency = useRef(currency);
+
+  const resetPrice = useEffectEvent(() => {
+    onFiltersChange({ ...filters, minPrice: '', maxPrice: '' });
+  });
+
+  useEffect(() => {
+    if (prevCurrency.current === currency) return;
+    prevCurrency.current = currency;
+    resetPrice();
+  }, [currency]);
 
   const getStarsLabel = (count) => {
     if (count === 1) return text.star;
