@@ -35,7 +35,6 @@ export default function DateSearch({ active, onOpen, onClose }) {
 
   const { checkIn, checkOut } = useSelector((state) => state.search);
   const language = useSelector((state) => state.settings.language);
-  
 
   const text = translations[language];
   const locale = language || 'en';
