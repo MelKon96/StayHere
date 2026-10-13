@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 
 import { CURRENCIES } from '../../constants/currencies';
 import { LANGUAGES } from '../../constants/languages';
-import { translations } from '../../constants/translations';
+import { NAV_ITEMS } from '../../constants/navigation';
 import { ROUTES } from '../../constants/routes';
+import { translations } from '../../constants/translations';
 import {
   setCurrency,
   setLanguage,
@@ -54,6 +55,13 @@ const Header = () => {
     hint: `${item.code} · ${item.symbol}`,
   }));
 
+  const renderNavLinks = (onClick) =>
+    NAV_ITEMS.map(({ path, labelKey }) => (
+      <Link key={path} to={path} onClick={onClick}>
+        {text.header[labelKey]}
+      </Link>
+    ));
+
   const settingsButtons = (
     <>
       <button
@@ -88,11 +96,7 @@ const Header = () => {
             Stayhere
           </Link>
 
-          <nav className={styles.navigation}>
-            <Link to={ROUTES.HOME}>{text.header.home}</Link>
-            <Link to={ROUTES.HOTELS}>{text.header.hotels}</Link>
-            <Link to={ROUTES.MY_BOOKINGS}>{text.header.bookings}</Link>
-          </nav>
+          <nav className={styles.navigation}>{renderNavLinks()}</nav>
 
           <div className={styles.actions}>{settingsButtons}</div>
 
@@ -111,15 +115,7 @@ const Header = () => {
 
           {isMenuOpen && (
             <nav id="mobile-navigation" className={styles.mobileMenu}>
-              <Link to={ROUTES.HOME} onClick={closeMenu}>
-                {text.header.home}
-              </Link>
-              <Link to={ROUTES.HOTELS} onClick={closeMenu}>
-                {text.header.hotels}
-              </Link>
-              <Link to={ROUTES.MY_BOOKINGS} onClick={closeMenu}>
-                {text.header.bookings}
-              </Link>
+              {renderNavLinks(closeMenu)}
               <div className={styles.mobileSettings}>{settingsButtons}</div>
             </nav>
           )}
