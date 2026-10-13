@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { destinations } from '../../constants/destinations';
 import { translations } from '../../constants/translations';
+import { ROUTES } from '../../constants/routes';
 import { setCity } from '../../helpers/store/slices/search/searchSlice';
 
 import styles from './Home.module.css';
@@ -15,7 +16,7 @@ const Home = () => {
 
   const handleDestinationClick = (location) => {
     dispatch(setCity(location));
-    navigate('/hotels');
+    navigate(ROUTES.HOTELS);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   return (

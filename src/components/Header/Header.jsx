@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { CURRENCIES } from '../../constants/currencies';
 import { LANGUAGES } from '../../constants/languages';
 import { translations } from '../../constants/translations';
+import { ROUTES } from '../../constants/routes';
 import {
   setCurrency,
   setLanguage,
@@ -83,14 +84,14 @@ const Header = () => {
     <header className={styles.header}>
       <Container>
         <div className={styles.top}>
-          <Link to="/" className={styles.logo} onClick={closeMenu}>
+          <Link to={ROUTES.HOME} className={styles.logo} onClick={closeMenu}>
             Stayhere
           </Link>
 
           <nav className={styles.navigation}>
-            <Link to="/">{text.header.home}</Link>
-            <Link to="/hotels">{text.header.hotels}</Link>
-            <Link to="/my-bookings">{text.header.bookings}</Link>
+            <Link to={ROUTES.HOME}>{text.header.home}</Link>
+            <Link to={ROUTES.HOTELS}>{text.header.hotels}</Link>
+            <Link to={ROUTES.MY_BOOKINGS}>{text.header.bookings}</Link>
           </nav>
 
           <div className={styles.actions}>{settingsButtons}</div>
@@ -110,13 +111,13 @@ const Header = () => {
 
           {isMenuOpen && (
             <nav id="mobile-navigation" className={styles.mobileMenu}>
-              <Link to="/" onClick={closeMenu}>
+              <Link to={ROUTES.HOME} onClick={closeMenu}>
                 {text.header.home}
               </Link>
-              <Link to="/hotels" onClick={closeMenu}>
+              <Link to={ROUTES.HOTELS} onClick={closeMenu}>
                 {text.header.hotels}
               </Link>
-              <Link to="/my-bookings" onClick={closeMenu}>
+              <Link to={ROUTES.MY_BOOKINGS} onClick={closeMenu}>
                 {text.header.bookings}
               </Link>
               <div className={styles.mobileSettings}>{settingsButtons}</div>

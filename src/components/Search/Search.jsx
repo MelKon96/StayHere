@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { translations } from '../../constants/translations';
+import { ROUTES } from '../../constants/routes';
 import { useFilteredHotels } from '../../hooks/useFilteredHotels';
 
 import LocationSearch from './LocationSearch';
@@ -33,7 +34,7 @@ export default function Search() {
   const text = useMemo(() => translations[language].search, [language]);
 
   const isHotelsPage = useMemo(
-    () => location.pathname === '/hotels',
+    () => location.pathname === ROUTES.HOTELS,
     [location.pathname],
   );
 
@@ -55,7 +56,7 @@ export default function Search() {
   }, []);
 
   const goToHotels = useCallback(() => {
-    navigate('/hotels');
+    navigate(ROUTES.HOTELS);
   }, [navigate]);
 
   const handleClickOutside = useCallback((event) => {

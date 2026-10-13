@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { translations } from '../../constants/translations';
 import { convertPrice, getCurrencySymbol } from '../../utils/currency';
+import { ROUTES } from '../../constants/routes';
 
 import styles from './HotelCard.module.css';
 
@@ -43,7 +44,10 @@ const HotelCard = ({ hotel = [], loading = false }) => {
 
   return (
     <article className={styles.card}>
-      <Link to={`/hotels/${hotel.id}`} className={styles.imageLink}>
+      <Link
+        to={ROUTES.HOTEL.replace(':id', hotel.id)}
+        className={styles.imageLink}
+      >
         <img src={hotel.images[0]} alt={hotel.name} className={styles.image} />
       </Link>
 
@@ -62,7 +66,10 @@ const HotelCard = ({ hotel = [], loading = false }) => {
           {text.hotels.card.perNight}
         </p>
 
-        <Link to={`/hotels/${hotel.id}`} className={styles.detailsLink}>
+        <Link
+          to={ROUTES.HOTEL.replace(':id', hotel.id)}
+          className={styles.detailsLink}
+        >
           {text.hotels.card.details}
         </Link>
       </div>

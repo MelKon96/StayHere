@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { translations } from '../../constants/translations';
+import { ROUTES } from '../../constants/routes';
 
 import styles from './NotFound.module.css';
 
@@ -19,7 +20,7 @@ const NotFound = () => {
 
         <p className={styles.text}>{text.message}</p>
 
-        <Link className={styles.link} to="/">
+        <Link className={styles.link} to={ROUTES.HOME}>
           {text.link}
         </Link>
       </div>
