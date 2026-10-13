@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { setGuests } from '../../helpers/store/slices/search/searchSlice';
 import { translations } from '../../constants/translations';
+import { getGuestLabel } from '../../utils/guestLabel';
 
 import styles from './Search.module.css';
 
@@ -15,9 +16,6 @@ export default function GuestsSearch({ onOpen }) {
   const language = useSelector((state) => state.settings.language);
 
   const text = translations[language];
-
-  const guestLabel =
-    guests === 1 ? text.search.guest : text.search.guestsPlural;
 
   return (
     <div className={`${styles.item} ${styles.guestsItem}`} onClick={onOpen}>
@@ -35,7 +33,7 @@ export default function GuestsSearch({ onOpen }) {
         </button>
 
         <span className={styles.guestsValue} aria-live="polite">
-          {guests} {guestLabel}
+          {guests} {getGuestLabel(guests, language, text.search)}
         </span>
 
         <button

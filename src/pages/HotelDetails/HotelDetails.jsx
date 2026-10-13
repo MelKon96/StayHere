@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { translations } from '../../constants/translations';
+import { ROUTES } from '../../constants/routes';
 import { setBooking } from '../../helpers/store/slices/booking/bookingSlice';
 import { useGetHotelsQuery } from '../../services/hotelApi';
 import { convertPriceWithSymbol } from '../../utils/currency';
@@ -118,7 +119,7 @@ const HotelDetails = () => {
                             }),
                           );
 
-                          navigate('/booking');
+                          navigate(ROUTES.BOOKING);
                         }}
                       >
                         {text.hotels.details.book}
