@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -24,9 +24,11 @@ const buildMonthCells = (monthDate) => {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   const cells = Array(offset).fill(null);
+
   for (let day = 1; day <= daysInMonth; day++) {
     cells.push(toISO(new Date(year, month, day)));
   }
+
   return cells;
 };
 
@@ -40,44 +42,49 @@ export default function DateSearch({ active, onOpen, onClose }) {
   const locale = language || 'en';
 
   const rootRef = useRef(null);
-  const todayISO = useMemo(() => toISO(today()), []);
 
   const [visibleMonth, setVisibleMonth] = useState(() =>
     startOfMonth(checkIn ? fromISO(checkIn) : today()),
   );
   const [hovered, setHovered] = useState(null);
 
+  const todayISO = toISO(today());
+
   // Локализованные названия месяцев и дней недели
-  const monthFormatter = useMemo(
-    () => new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }),
-    [locale],
+  const monthFormatter = new Intl.DateTimeFormat(locale, {
+    month: 'long',
+    year: 'numeric',
+  });
+  const shortFormatter = new Intl.DateTimeFormat(locale, {
+    day: 'numeric',
+    month: 'short',
+  });
+  const weekdayFormatter = new Intl.DateTimeFormat(locale, {
+    weekday: 'short',
+  });
+
+  // 2024-01-01 — понедельник
+  const weekdays = Array.from({ length: 7 }, (_, i) =>
+    weekdayFormatter.format(new Date(2024, 0, 1 + i)),
   );
-  const shortFormatter = useMemo(
-    () => new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short' }),
-    [locale],
-  );
-  const weekdays = useMemo(() => {
-    const formatter = new Intl.DateTimeFormat(locale, { weekday: 'short' });
-    // 2024-01-01 — понедельник
-    return Array.from({ length: 7 }, (_, i) =>
-      formatter.format(new Date(2024, 0, 1 + i)),
-    );
-  }, [locale]);
 
   // Закрытие по клику снаружи и по Escape
   useEffect(() => {
     if (!active) return undefined;
 
     const handleOutside = (event) => {
-      if (rootRef.current && !rootRef.current.contains(event.target))
+      if (rootRef.current && !rootRef.current.contains(event.target)) {
         onClose?.();
+      }
     };
+
     const handleKey = (event) => {
       if (event.key === 'Escape') onClose?.();
     };
 
     document.addEventListener('mousedown', handleOutside);
     document.addEventListener('keydown', handleKey);
+
     return () => {
       document.removeEventListener('mousedown', handleOutside);
       document.removeEventListener('keydown', handleKey);
@@ -90,6 +97,7 @@ export default function DateSearch({ active, onOpen, onClose }) {
       dispatch(setCheckOut(''));
       return;
     }
+
     dispatch(setCheckOut(iso));
     setHovered(null);
     onClose?.();
@@ -100,6 +108,8 @@ export default function DateSearch({ active, onOpen, onClose }) {
     dispatch(setCheckIn(''));
     dispatch(setCheckOut(''));
   };
+
+  const formatValue = (iso) => shortFormatter.format(fromISO(iso));
 
   const canGoPrev = visibleMonth > startOfMonth(today());
 
@@ -127,7 +137,7 @@ export default function DateSearch({ active, onOpen, onClose }) {
           const isEnd = iso === checkOut;
           const inRange =
             checkIn && rangeEnd && iso > checkIn && iso < rangeEnd;
-          const hasTail = isStart && rangeEnd; // закругление/полоса справа от заезда
+          const hasTail = isStart && rangeEnd;
 
           const classes = [
             styles.calendarDay,
@@ -160,8 +170,6 @@ export default function DateSearch({ active, onOpen, onClose }) {
       </div>
     </div>
   );
-
-  const formatValue = (iso) => shortFormatter.format(fromISO(iso));
 
   return (
     <div
@@ -200,6 +208,7 @@ export default function DateSearch({ active, onOpen, onClose }) {
             >
               ‹
             </button>
+
             <button
               type="button"
               className={styles.calendarNav}
@@ -212,6 +221,7 @@ export default function DateSearch({ active, onOpen, onClose }) {
 
           <div className={styles.calendarMonths}>
             {renderMonth(visibleMonth)}
+
             <div className={styles.calendarSecondMonth}>
               {renderMonth(addMonths(visibleMonth, 1))}
             </div>
