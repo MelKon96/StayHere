@@ -12,7 +12,6 @@ const getBounds = (values) =>
         max: Math.ceil(Math.max(...values)),
       };
 
-
 const getTotalCapacity = (hotel) =>
   hotel.roomTypes.reduce((sum, room) => sum + room.capacity * room.quantity, 0);
 
@@ -25,13 +24,21 @@ export function useFilteredHotels() {
   const filters = useSelector((state) => state.hotelFilters);
 
   const { filteredHotels, priceBounds, roomsBounds } = useMemo(() => {
+    const normalizedCity = city.trim().toLowerCase();
+
     const minPrice =
       filters.minPrice !== '' ? Number(filters.minPrice) : -Infinity;
     const maxPrice =
       filters.maxPrice !== '' ? Number(filters.maxPrice) : Infinity;
 
     const baseHotels = hotels.filter((hotel) => {
-      if (city && hotel.location !== city) return false;
+      if (
+        normalizedCity &&
+        !hotel.location.toLowerCase().includes(normalizedCity)
+      ) {
+        return false;
+      }
+
       if (getTotalCapacity(hotel) < guests) return false;
 
       if (
@@ -50,7 +57,6 @@ export function useFilteredHotels() {
 
       return true;
     });
-
 
     const hotelsInSizeRange = baseHotels.filter((hotel) => {
       if (filters.minRooms !== '' && hotel.rooms < Number(filters.minRooms))

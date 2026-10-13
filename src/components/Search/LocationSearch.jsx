@@ -1,53 +1,71 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setCity } from '../../helpers/store/slices/search/searchSlice';
 import { useGetHotelsQuery } from '../../services/hotelApi';
 import { translations } from '../../constants/translations';
-import useDebounce from '../../hooks/useDebounce';
 
 import styles from './Search.module.css';
 
+const DEBOUNCE_MS = 300;
+
 export default function LocationSearch({ active, onOpen, onClose }) {
   const dispatch = useDispatch();
+
   const language = useSelector((state) => state.settings.language);
   const city = useSelector((state) => state.search.city);
+
   const text = translations[language].search;
 
   const [inputValue, setInputValue] = useState(city);
-  const debouncedValue = useDebounce(inputValue, 300);
-  useEffect(() => {
-    setInputValue(city);
-  }, [city]);
+
+  const timerRef = useRef(null);
 
   const { data: hotels = [] } = useGetHotelsQuery();
-  const exampleCities = [
-    ...new Set(hotels.map((hotel) => hotel.location)),
-  ].slice(0, 2);
+
+  const cityNames = useMemo(
+    () => [...new Set(hotels.map((hotel) => hotel.location))],
+    [hotels],
+  );
+
+  const exampleCities = cityNames.slice(0, 2);
 
   const placeholder =
     exampleCities.length > 0
       ? `${exampleCities.join(', ')}...`
       : text.destinationPlaceholder;
 
-  const filteredCities = useMemo(() => {
-    const query = debouncedValue.trim().toLowerCase();
-    if (!query) return [];
+  const query = inputValue.trim().toLowerCase();
 
-    const cities = new Set(hotels.map((hotel) => hotel.location));
-    return [...cities].filter((city) => city.toLowerCase().includes(query));
-  }, [hotels, debouncedValue]);
+  const filteredCities = query
+    ? cityNames.filter((name) => name.toLowerCase().includes(query))
+    : [];
+
+  useEffect(() => {
+    clearTimeout(timerRef.current);
+    setInputValue((prev) => (prev.trim() === city ? prev : city));
+  }, [city]);
+
+  useEffect(() => () => clearTimeout(timerRef.current), []);
 
   const handleInputChange = (event) => {
     const value = event.target.value;
+
     setInputValue(value);
-    if (!value) dispatch(setCity(''));
+
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(
+      () => dispatch(setCity(value.trim())),
+      DEBOUNCE_MS,
+    );
   };
 
-  const handleCitySelect = (event, city) => {
+  const handleCitySelect = (event, selectedCity) => {
     event.stopPropagation();
-    setInputValue(city);
-    dispatch(setCity(city));
+    clearTimeout(timerRef.current);
+
+    setInputValue(selectedCity);
+    dispatch(setCity(selectedCity));
     onClose();
   };
 
@@ -77,13 +95,13 @@ export default function LocationSearch({ active, onOpen, onClose }) {
 
       {showSuggestions && (
         <div className={styles.suggestions}>
-          {filteredCities.map((city) => (
+          {filteredCities.map((name) => (
             <button
-              key={city}
+              key={name}
               type="button"
-              onClick={(event) => handleCitySelect(event, city)}
+              onClick={(event) => handleCitySelect(event, name)}
             >
-              {city}
+              {name}
             </button>
           ))}
         </div>
