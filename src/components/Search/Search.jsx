@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -29,75 +29,64 @@ export default function Search() {
   const [hintVisible, setHintVisible] = useState(false);
 
   const searchRef = useRef(null);
-  const prevFilters = useRef({ city, guests, hotelFilters });
+  const isFirstRender = useRef(true);
 
-  const text = useMemo(() => translations[language].search, [language]);
+  const text = translations[language].search;
+  const isHotelsPage = location.pathname === ROUTES.HOTELS;
 
-  const isHotelsPage = useMemo(
-    () => location.pathname === ROUTES.HOTELS,
-    [location.pathname],
-  );
+  const showHint =
+    hintVisible && !isLoading && activeItem === null && !isHotelsPage;
 
-  const showHint = useMemo(
-    () => hintVisible && !isLoading && activeItem === null && !isHotelsPage,
-    [hintVisible, isLoading, activeItem, isHotelsPage],
-  );
-
-  const close = useCallback(() => {
+  const close = () => {
     setActiveItem(null);
-  }, []);
+  };
 
-  const openLocation = useCallback(() => {
+  const openLocation = () => {
     setActiveItem('location');
-  }, []);
+  };
 
-  const openDate = useCallback(() => {
+  const openDate = () => {
     setActiveItem('date');
-  }, []);
+  };
 
-  const goToHotels = useCallback(() => {
+  const goToHotels = () => {
     navigate(ROUTES.HOTELS);
-  }, [navigate]);
-
-  const handleClickOutside = useCallback((event) => {
-    if (!searchRef.current?.contains(event.target)) {
-      setActiveItem(null);
-    }
-  }, []);
-
-  const handleEscape = useCallback((event) => {
-    if (event.key === 'Escape') {
-      setActiveItem(null);
-    }
-  }, []);
+  };
 
   useEffect(() => {
-    const prev = prevFilters.current;
-
-    if (
-      prev.city === city &&
-      prev.guests === guests &&
-      prev.hotelFilters === hotelFilters
-    ) {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
       return;
     }
 
-    prevFilters.current = { city, guests, hotelFilters };
-
     setHintVisible(true);
 
-    const id = setTimeout(() => {
+    const timerId = setTimeout(() => {
       setHintVisible(false);
     }, HINT_DURATION);
 
-    return () => clearTimeout(id);
+    return () => clearTimeout(timerId);
   }, [city, guests, hotelFilters]);
 
   useEffect(() => {
-    if (isHotelsPage) setHintVisible(false);
+    if (isHotelsPage) {
+      setHintVisible(false);
+    }
   }, [isHotelsPage]);
 
   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!searchRef.current?.contains(event.target)) {
+        setActiveItem(null);
+      }
+    };
+
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        setActiveItem(null);
+      }
+    };
+
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleEscape);
 
@@ -105,7 +94,7 @@ export default function Search() {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [handleClickOutside, handleEscape]);
+  }, []);
 
   return (
     <div ref={searchRef} className={styles.search}>

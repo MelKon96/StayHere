@@ -1,13 +1,20 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
 
 import { setCity } from '../../helpers/store/slices/search/searchSlice';
 import { useGetHotelsQuery } from '../../services/hotelApi';
 import { translations } from '../../constants/translations';
+import useDebounce from '../../hooks/useDebounce';
 
 import styles from './Search.module.css';
 
 const DEBOUNCE_MS = 300;
+
+const selectCityNames = createSelector(
+  (result) => result.data,
+  (hotels = []) => [...new Set(hotels.map((hotel) => hotel.location))],
+);
 
 export default function LocationSearch({ active, onOpen, onClose }) {
   const dispatch = useDispatch();
@@ -19,14 +26,17 @@ export default function LocationSearch({ active, onOpen, onClose }) {
 
   const [inputValue, setInputValue] = useState(city);
 
-  const timerRef = useRef(null);
+  const debouncedInputValue = useDebounce(inputValue, DEBOUNCE_MS);
 
-  const { data: hotels = [] } = useGetHotelsQuery();
+  const { cityNames } = useGetHotelsQuery(undefined, {
+    selectFromResult: (result) => ({ cityNames: selectCityNames(result) }),
+  });
 
-  const cityNames = useMemo(
-    () => [...new Set(hotels.map((hotel) => hotel.location))],
-    [hotels],
-  );
+  const query = inputValue.trim().toLowerCase();
+
+  const filteredCities = query
+    ? cityNames.filter((name) => name.toLowerCase().includes(query))
+    : [];
 
   const exampleCities = cityNames.slice(0, 2);
 
@@ -35,34 +45,21 @@ export default function LocationSearch({ active, onOpen, onClose }) {
       ? `${exampleCities.join(', ')}...`
       : text.destinationPlaceholder;
 
-  const query = inputValue.trim().toLowerCase();
-
-  const filteredCities = query
-    ? cityNames.filter((name) => name.toLowerCase().includes(query))
-    : [];
-
+  // Внешнее изменение города
   useEffect(() => {
-    clearTimeout(timerRef.current);
     setInputValue((prev) => (prev.trim() === city ? prev : city));
   }, [city]);
 
-  useEffect(() => () => clearTimeout(timerRef.current), []);
+  useEffect(() => {
+    dispatch(setCity(debouncedInputValue.trim()));
+  }, [debouncedInputValue, dispatch]);
 
   const handleInputChange = (event) => {
-    const value = event.target.value;
-
-    setInputValue(value);
-
-    clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(
-      () => dispatch(setCity(value.trim())),
-      DEBOUNCE_MS,
-    );
+    setInputValue(event.target.value);
   };
 
   const handleCitySelect = (event, selectedCity) => {
     event.stopPropagation();
-    clearTimeout(timerRef.current);
 
     setInputValue(selectedCity);
     dispatch(setCity(selectedCity));
