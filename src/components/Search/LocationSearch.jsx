@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 
@@ -34,9 +34,13 @@ export default function LocationSearch({ active, onOpen, onClose }) {
 
   const query = inputValue.trim().toLowerCase();
 
-  const filteredCities = query
-    ? cityNames.filter((name) => name.toLowerCase().includes(query))
-    : [];
+  const filteredCities = useMemo(
+    () =>
+      query
+        ? cityNames.filter((name) => name.toLowerCase().includes(query))
+        : [],
+    [cityNames, query],
+  );
 
   const exampleCities = cityNames.slice(0, 2);
 
